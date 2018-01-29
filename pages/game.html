@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- <link rel="stylesheet/less" href="../css/game-css/game.less" /> -->
+    <link rel="stylesheet" href="../css/game-css/game.css" />
+    <!--音乐-->
+    <link rel="stylesheet" href="../css/game-css/stylesheets/style.css">
+
+</head>
+<style>
+    .alert-box {
+        display: none;
+        position: relative;
+        margin: 200px auto 0;
+        padding: 215px 15px 17px;
+        width: 450px;
+        color: #FFF;
+        text-align: center
+    }
+
+    .alert-box p {
+        margin: 0
+    }
+
+    .alert-circle {
+        position: absolute;
+        top: -50px;
+        left: 111px
+    }
+
+    .alert-sec-circle {
+        stroke-dashoffset: 0;
+        stroke-dasharray: 735;
+        transition: stroke-dashoffset 1s linear
+    }
+
+    .alert-sec-text {
+        position: absolute;
+        top: 19px;
+        left: 170px;
+        width: 120px;
+        color: #000;
+        font-size: 68px
+    }
+
+    .alert-sec-unit {
+        font-size: 34px
+    }
+
+    .alert-body {
+        margin: 35px 0
+    }
+
+    .alert-head {
+        color: #fff;
+        font-size: 28px
+    }
+</style>
+<body style="">
+    <div class="head">
+        <span id="roomId">
+            <text>KINGONG狼人杀俱乐部</text>
+        </span>
+        <a onclick="select(this)"  style="color:#fff">返回</a>
+    </div>
+    <div class="content">
+        <div class="left">
+            <ul>
+                <li>
+                    <div class="top">
+                        <text>1号</text>
+                        <text>待定</text>
+                    </div>
+                </li>
+                <li>
+                    <div class="top">
+                        <text>2号</text>
+                        <text>待定</text>
+                    </div>
+                </li>
+                <li>
+                    <div class="top">
+                        <text>3号</text>
+                        <text>待定</text>
+                    </div>
+                </li>
+                <li>
+                    <div class="top">
+                        <text>4号</text>
+                        <text>待定</text>
+                    </div>
+                </li>
+                <li>
+                    <div class="top">
+                        <text>5号</text>
+                        <text>待定</text>
+                    </div>
+                </li>
+                <li>
+                    <div class="top">
+                        <text>6号</text>
+                        <text>待定</text>
+                    </div>
+                </li>
+                <li>
+                    <div class="top">
+                        <text>7号</text>
+                        <text>待定</text>
+                    </div>
+                </li>
+                <li>
+                    <div class="top">
+                        <text>8号</text>
+                        <text>待定</text>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="center">
+            <div class="top">
+                <!--音乐播放器-->
+                <div class="music">
+                    <div id="player">
+                        <div class="cover">
+                            <img src="../images/7.png" alt="">
+                        </div>
+                        <div class="ctrl">
+                            <div class="tag">
+                                <strong>Title</strong>
+                            </div>
+                            <div class="control">
+                                <div class="left">
+                                    <div class="rewind icon"></div>
+                                    <div class="playback"></div>
+                                    <div class="fastforward icon"></div>
+                                    <div class="list"></div>
+                                </div>
+                                <div class="volume">
+                                    <div class="mute icon left">
+                                    </div>
+                                    <div class="slider left ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
+                                        <div class="pace" style="width:50%">
+
+                                        </div>
+                                        <a class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left:50%"></a>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="progress" style="background:transparent">
+                                <div class="slider1">
+                                    <div class="loaded"></div>
+                                    <div class="pace"></div>
+                                </div>
+                                <div id="repeat">
+                                    <div class="repeat icon"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="play1">
+                        <ul id="playlist"></ul>
+                    </div>
+                </div>
+                <span style="background-color: #6D9CD7" class="light">天亮了</span>
+                <span style="background-color: #2dcef0" class="black">天黑了</span>
+            </div>
+            <div class="bottom">
+                <audio></audio>
+                <ul>
+                    <li>
+                        <div class="top">
+                            <text>1号</text>
+                            <img src="../images/await.png" alt="" class="wait">
+                        </div>
+                        <div class='Exited'></div>
+                    </li>
+                    <li>
+                        <div class="top">
+                            <text>2号</text>
+                            <img src="../images/await.png" alt="" class="wait">
+                        </div>
+                        <div class='Exited'></div>
+                    </li>
+                    <li>
+                        <div class="top">
+                            <text>3号</text>
+                            <img src="../images/await.png" alt="" class="wait">
+                        </div>
+                        <div class='Exited'></div>
+                    </li>
+                    <li>
+                        <div class="top">
+                            <text>4号</text>
+                            <img src="../images/await.png" alt="" class="wait">
+                        </div>
+                        <div class='Exited'></div>
+                    </li>
+                    <li>
+                        <div class="top">
+                            <text>5号</text>
+                            <img src="../images/await.png" alt="" class="wait">
+                        </div>
+                        <div class='Exited'></div>
+                    </li>
+                    <li>
+                        <div class="top">
+                            <text>6号</text>
+                            <img src="../images/await.png" alt="" class="wait">
+                        </div>
+                        <div class='Exited'></div>
+                    </li>
+                    <li>
+                        <div class="top">
+                            <text>7号</text>
+                            <img src="../images/await.png" alt="" class="wait">
+                        </div>
+                        <div class='Exited'></div>
+
+                    </li>
+                    <li>
+                        <div class="top">
+                            <text>8号</text>
+                            <img src="../images/await.png" alt="" class="wait">
+                        </div>
+                        <div class='Exited'></div>
+                    </li>
+                    <li>
+                        <div class="top">
+                            <text>9号</text>
+                            <img src="../images/await.png" alt="" class="wait">
+                        </div>
+                        <div class='Exited'></div>
+                    </li>
+                    <li>
+                        <div class="top">
+                            <text>10号</text>
+                            <img src="../images/await.png" alt="" class="wait">
+                        </div>
+                        <div class='Exited'></div>
+                    </li>
+                    <li>
+                        <div class="top">
+                            <text>11号</text>
+                            <img src="../images/await.png" alt="" class="wait">
+                        </div>
+                        <div class='Exited'></div>
+                    </li>
+                    <li>
+                        <div class="top">
+                            <text>12号</text>
+                            <img src="../images/await.png" alt="" class="wait">
+                        </div>
+                        <div class='Exited'></div>
+                    </li>
+                    <li>
+                        <div class="top">
+                            <text>13号</text>
+                            <img src="../images/await.png" alt="" class="wait">
+                        </div>
+                        <div class='Exited'></div>
+                    </li>
+                    <li>
+                        <div class="top">
+                            <text>14号</text>
+                            <img src="../images/await.png" alt="" class="wait">
+                        </div>
+                        <div class='Exited'></div>
+                    </li>
+                    <li>
+                        <div class="top">
+                            <text>15号</text>
+                            <img src="../images/await.png" alt="" class="wait">
+                        </div>
+                        <div class='Exited'></div>
+                    </li>
+                </ul>
+                <!--玩家死亡-->
+                <div class="death">
+                    <text></text>
+                    <div id="sure1">确定</div>
+                </div>
+                <!-- 狼王杀死的玩家 -->
+                <div class="kingdeath">
+                    <text></text>
+                    <div id="kingdeathsure">确定</div>
+                </div>
+                <!--警长死亡-->
+                <div class="transmit">
+                    <text>是否移交警徽</text>
+                    <button style="margin-right: 0.35rem;left:1.1rem;top:1.75rem" id="shift">移交</button>
+                    <button style="margin-right: 0.35rem;left:3.2rem;top:1.75rem;background:#2C5380" id="tear">撕</button>
+                </div>
+                <div class="play">
+                    <text></text>
+                    <div id="certain">确定</div>
+                </div>
+                <!-- 狼人自爆 -->
+                <div class="kingWolfkill">
+                    <text></text>
+                    <button style="margin-right: 0.5rem;left:3.2rem;top:2rem;background:#2C5380" class="n">取消</button>
+                    <button style="margin-right: 0.5rem;left:1rem;top:2rem" class="y">确定</button>
+                </div>
+                <!-- 狼人是否杀人 -->
+                <div class="wolfDeath">
+                    <text>请选择击杀玩家</text>
+                    <button style="margin-right: 0.35rem;left:1.1rem;top:1.75rem" class="attack">确定</button>
+                    <button style="margin-right: 0.35rem;left:3.2rem;top:1.75rem;background:#2C5380" id="cancel">取消</button>
+                </div>
+                <!-- 猎人是否杀人 -->
+                <div class="huntDied">
+                    <text>请选择击杀玩家</text>
+                    <button style="margin-right: 0.35rem;left:1.1rem;top:1.75rem" class="huntShot">确定</button>
+                    <button style="margin-right: 0.35rem;left:3.2rem;top:1.75rem;background:#2C5380" id="cancelShot">取消</button>
+                </div>
+                <!-- 警徽是否流失 -->
+                <div class="lossBadge">
+                    <text>警徽是否流失</text>
+                    <button style="margin-right: 0.35rem;left:1.1rem;top:1.75rem" class="lossSure">确定</button>
+                    <button style="margin-right: 0.35rem;left:3.2rem;top:1.75rem;background:#2C5380" id="cancelLoss">取消</button>
+                </div>
+                <!--最后结果-->
+                <div id="result">
+                    <button style="top:0.49rem;left:1.07rem" class="good">好人胜利</button>
+                    <button style="top:0.49rem;left:3.83rem" class="bad">狼人胜利</button>
+                    <button style="top:1.57rem;left:1.07rem" class="couple">情侣胜利</button>
+                    <button style="top:1.57rem;left:3.83rem" class="cancel">取消游戏</button>
+                    <button style="top:2.92rem;left:2.24rem" class="sure1">确定</button>
+                    <span></span>
+                </div>
+                <div class="result1">狼人胜利</div>
+                <div class="result2">好人胜利</div>
+                <div class="result3">情侣胜利</div>
+            </div>
+        </div>
+        <div class="right">
+            <ul>
+                <li>
+                    <div class="top">
+                        <text>9号</text>
+                        <text>待定</text>
+                    </div>
+                </li>
+                <li>
+                    <div class="top">
+                        <text>10号</text>
+                        <text>待定</text>
+                    </div>
+                </li>
+                <li>
+                    <div class="top">
+                        <text>11号</text>
+                        <text>待定</text>
+                    </div>
+                </li>
+                <li>
+                    <div class="top">
+                        <text>12号</text>
+                        <text>待定</text>
+                    </div>
+                </li>
+                <li>
+                    <div class="top">
+                        <text>13号</text>
+                        <text>待定</text>
+                    </div>
+                </li>
+                <li>
+                    <div class="top">
+                        <text>14号</text>
+                        <text>待定</text>
+                    </div>
+                </li>
+                <li>
+                    <div class="top">
+                        <text>15号</text>
+                        <text>待定</text>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+    <div class="footer">
+        <div id="police" class="eligibility">
+            <button type="" style="background-color: #6d9cd7;margin-left: 6rem;margin-right: 1rem" class="start">竞选警长</button>
+            <button type="" style="background-color: #6d9cd7" class="over">结束竞选</button>
+        </div>
+        <div id="vote">
+            <audio></audio>
+            <button type="" style="background-color: #6d9cd7;margin-left: 6rem;margin-right: 1rem" class="startVote">投票</button>
+            <button type="" style="background-color: #6d9cd7" class="overVote">投票结束</button>
+        </div>
+        <text id="end">终止游戏</text>
+        <div class="speaker">
+            <i></i>
+            <div id="speaker">
+                <audio></audio>
+            </div>
+        </div>
+    </div>
+    <!--倒计时-->
+    <div class="model">
+        <div class="dele"></div>
+        <div id="js-alert-box" class="alert-box">
+            <svg class="alert-circle" width="234" height="234">
+                <circle cx="117" cy="117" r="108" fill="#FFF" stroke="#43AEFA" stroke-width="17"></circle>
+                <circle id="js-sec-circle" class="alert-sec-circle" cx="117" cy="117" r="108" fill="transparent" stroke="#F4F1F1" stroke-width="18"
+                    transform="rotate(-90 117 117)"></circle>
+            </svg>
+            <div id="js-sec-text" class="alert-sec-text"></div>
+            <div id="js-alert-head" class="alert-head"></div>
+        </div>
+    </div>
+</body>
+<script src="../js/game-js/jquery-2.1.1.js"></script>
+<script src="../js/game-js/rem.js"></script>
+<script src="../js/base.js"></script>
+<script src="../js/game-js/data.js" id="data"></script>
+<script src="../js/game-js/jquery-ui-1.8.17.custom.min.js"></script>
+<script src="../js/game-js/Features.js"></script>
+<script src="../js/game-js/script.js" id="script"></script>
+<script src="../js/game-js/game.js" id="game"></script>
+<script src="../js/game-js/Countdown.js"></script>
+<script>
+        $('body').css('background','#30465e')
+      // 点击加载页面
+       function select(obj) {
+           $.ajaxSetup({
+               cache: true
+           });
+           $("body").load("game-index.html");
+         }
+</script>
+</html>

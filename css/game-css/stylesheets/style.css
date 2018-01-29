@@ -1,0 +1,248 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+a {
+  outline: none;
+  text-decoration: none;
+}
+.clear {
+  clear: both;
+}
+
+#background {
+  background-size: cover;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+.right{
+  float: right;
+}
+#player {
+  position: relative;
+  width: 5.70rem;
+  height: 1.6rem;
+  background-size: cover;
+}
+
+#player .cover {
+  position: absolute;
+  top: 0.18rem;
+  left: 0.21rem;
+  width: 0.51rem;
+  height: 0.60rem;
+}
+
+#player .cover img {
+  width: 100%;
+  height: 100%;
+}
+
+#player .ctrl {
+  margin-left: 1.55rem;
+}
+
+#player .ctrl .tag {
+  position: absolute;
+  top: 0.18rem;
+  left: 0.89rem;
+}
+
+#player .ctrl .tag strong {
+  width: 2.75rem;
+  height: 0.49rem;
+  line-height: 0.49rem;
+  text-align: center;
+  display: block;
+  text-overflow: ellipsis;
+  background: url(../../../images/4.png) no-repeat;
+  background-size: cover;
+  overflow: hidden;
+}
+#player .ctrl .icon {
+  display: inline-block;
+  cursor: pointer;
+  width: 0.33rem;
+  height: 0.36rem;
+  user-select: none;
+}
+
+#player .ctrl .icon:hover,
+#player .ctrl .icon.enable {
+  opacity: 1;
+}
+
+#player .ctrl .icon:active {
+  opacity: 0.3;
+}
+
+#player .ctrl .control {
+  /* margin-top: 0.10rem; */
+  height: 0.25rem;
+  position: absolute;
+  left: 0;
+  width: 5.7rem;
+}
+
+#player .ctrl .control .rewind {
+  position: absolute;
+  top: 0.85rem;
+  left: 0.94rem;
+  background-image: url(../../../images/last.png);
+  background-size: cover;
+}
+/*列表*/
+#player .ctrl .control .list {
+  background-image: url(../../../images/6.png);
+  background-size: cover;
+  width: 0.39rem;
+  height: 0.30rem;
+  position: absolute;
+  top: 0.28rem;
+  left: 5rem;
+}
+
+
+/*播放*/
+
+#player .ctrl .control .playback.playing {
+  width: 0.17rem;
+  height: 0.39rem;
+  background-image: url(../../../images/5.png);
+  background-size: cover;
+  position: absolute;
+  top: 0.87rem;
+  left: 2.75rem;
+}
+
+
+/*暂停*/
+
+#player .ctrl .control .playback {
+  background-image: url(../../../images/play1.png);
+  background-size: cover;
+  width: 0.31rem;
+  height: 0.36rem;
+   position: absolute;
+  top: 0.87rem;
+  left: 2.75rem;
+}
+/**/
+#player .ctrl .control .fastforward {
+  background-image: url(../../../images/next.png);
+  background-size: cover;
+  position: absolute;
+  top: 0.85rem;
+  left: 4.42rem;
+}
+
+#player .ctrl .control .volume .mute {
+  background-image: url(../../../images/volume.png);
+  background-size: cover;
+  position: absolute;
+  top: 0.85rem;
+  right: 0.15rem;
+  width: 0.4rem;
+  /* marker-end:  */
+}
+
+
+#player .ctrl .control .volume .mute.enable {
+  background-image: url(../../../images/mute.png);
+}
+
+#player .ctrl .progress #repeat {
+   width: 0.68rem;
+  height: 0.54rem;
+  position: absolute;
+  top: 0.17rem;
+  left: 3.87rem;
+}
+
+#player .ctrl .progress .repeat,
+#player .ctrl .progress .shuffle {
+  background-position: center bottom;
+}
+
+#player .ctrl .progress .repeat {
+  background-image: url(../../../images/all.png);
+  background-size: cover;
+  width: 0.68rem;
+  height: 0.54rem;
+}
+
+#player .ctrl .progress .repeat.once,
+#player .ctrl .progress .repeat.all {
+  position: relative;
+}
+
+#player .ctrl .progress .repeat.once,
+#player .ctrl .progress .repeat.all:before {
+  /*content: "all";*/
+  background-image: url(../../../images/once.png);
+  position: absolute;
+}
+
+#player .ctrl .progress .repeat.once {
+   width: 0.68rem;
+  height: 0.54rem;
+}
+
+#player .ctrl .progress .repeat.once:before {
+  /*content: "单曲";*/
+  font-size: 8px;
+}
+.slider {
+  /* display: none; */
+  background: rgba(0, 0, 0, 0.3);
+  height: 5px;
+  position: relative;
+  cursor: pointer;
+  border-radius: 5px;
+ 
+}
+.slider.left{
+    color: red;
+}
+.slider:hover a,
+.slider.enable a {
+  opacity: 1;
+}
+
+.slider a {
+  background: #fff;
+  margin-left: -2.5px;
+  position: absolute;
+  opacity: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  transition: opacity 0.3s;
+}
+.slider .loaded,
+.slider .pace {
+  position: absolute;
+  height: 100%;
+  opacity: 0.7;
+  border-radius: 5px;
+}
+
+.slider .loaded {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.slider {
+  background: #258fb8;
+}
+
+.pace {
+  background: #fff;
+}

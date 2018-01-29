@@ -1,0 +1,351 @@
+<div class="myProducts">
+    <!--搜索-->
+    <div class="search">
+        <button class="added" style="margin:0rem 0.65rem 0rem 0.35rem;width:1rem">添加</button>
+        <!-- <span style="margin-right:0.55rem;">
+        <text>总销量金额:</text>
+        <text style="color:#11a0e7">258</text>
+        <text>元</text>
+    </span>
+    <span>
+            <text>今日销量金额:</text>
+            <text style="color:#e24242">258</text>
+            <text>元</text>
+  </span> -->
+    </div>
+    <div class="bottom">
+        <table id="detailTable" data-toggle="table"></table>
+        <!--<table id="userTable" data-toggle="table"></table>-->
+    </div>
+    <!--是否删除-->
+    <div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="top:0.8rem">
+                <div class="modal-header">
+                    <text style="color:#fff">提示</text>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <text style="color:#797979" id="text"></text>
+                </div>
+                <div class="modal-footer">
+                    <input type="text" id="deletedProductId" style="display:none">
+                    <button type="button" class="btn btn-primary con" id="ok" style="height:0.7rem;background:#11a0e7">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 添加成功 -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="top:0.8rem">
+                <div class="modal-header" style="background:#11a0e7">
+                    <text style="color:#fff" id="modify">修改</text>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group" id="p-id">
+                            <label class="control-label">会员号</label>
+                            <input type="text" name="id" class="form-control" disabled="disabled">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">产品名称</label>
+                            <input type="text" name="name" class="form-control" placeholder="例如：抹茶蛋糕">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">图片地址</label>
+                            <input type="text" name="imgUrl" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">价格信息</label>
+                            <input name="price" type="number" class="form-control" placeholder="例如：15">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary con" id="certain" style="margin-left:2.5rem;height:0.7rem;background:#11a0e7">确认</button>
+                    <button type="button" class="btn btn-primary con" id="sure" style="margin-left:2.5rem;height:0.7rem;background:#11a0e7">发布</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $.cookie("sessionId");
+        $('.datetime-picker').datetimepicker({
+            format: 'yyyy-mm-dd hh:ii:00',
+            language: 'zh-CN',
+            autoclose: true,
+            todayHighlight: true,
+            todayBtn: true,
+            keyboardNavigation: true
+        });
+        // 输入框聚焦边框变色
+        $("input").focus(function () {
+            $("input").css("border-color", "#c4d1d6");
+            $(this).css("border-color", "#11a0e7");
+        });
+
+        var itemInfo, data, currentPage = 1;
+
+        function myProductsListData() {
+            req = {
+                currentPage: currentPage
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: admin + "/admin/merchant/myProducts",
+                data: req,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (res) {
+                    data = JSON.parse(res);
+                    if (data.code == 200) {
+                        itemInfo = data;
+                        initOperHisTable();
+                        //分页
+                        $('#box').paging({
+                            initPageNo: itemInfo.data.paginationInfo.currentPage, // 初始页码
+                            totalPages: itemInfo.data.paginationInfo.totalPage, //总页数
+                            // totalPages:10, ///总页数
+                            totalCount: '合计' + itemInfo.data.paginationInfo.totalRecord +
+                                '条数据', // 条目总数
+                            jump: true, //是否支持跳转
+                            callback: function (page) { // 回调函数
+                                currentPage = page;
+                            }
+                        })
+                    } else if (data.code == 202) {
+                        window.location.href = './login.html';
+                    } else {
+                        console.log('失败')
+                    }
+                },
+                error: function (xhr, textStatus) {
+                    alert("网络异常")
+                }
+            })
+        }
+        myProductsListData();
+
+        // 跳转数据页码
+        $('.myProducts').on('click', '#jumpText', function () {
+            var $inp = $('#jumpText:text');
+            $inp.bind('keydown', function (e) {
+                var key = e.which;
+                if (key == 13) {
+                    if (currentPage == $inp.val() || $inp.val() > itemInfo.data.paginationInfo.totalPage) {
+                        e.preventDefault();
+                    } else {
+                        e.preventDefault();
+                        currentPage = $inp.val();
+                        myProductsListData()
+                    }
+                }
+            });
+        })
+        $('.myProducts').on('click', '.jumpPage', function () {
+            currentPage = currentPage;
+            myProductsListData();
+        })
+        // 渲染表格
+        function initOperHisTable() {
+            $('#detailTable').bootstrapTable('destroy').bootstrapTable({
+                // url: admin+"/admin/merchant/myProducts",
+                data: itemInfo.data.products,
+                method: 'post',
+                contentType: "application/x-www-form-urlencoded",
+                dataField: "rows", //这是返回的json数组的key.默认好像是"rows".这里只有前后端约定好就行
+                pagination: true, //分页
+                sidePagination: "server", //服务端处理分页
+                paginationLoop: false,
+                showPaginationSwitch: false, //是否显示数据条数选择框
+                pageNumber: 1,
+                pageSize: 10,
+                pageList: [10],
+                showExport: true,
+                formatLoadingMessage: function () {
+                    return "请稍等，正在查询中...";
+                },
+
+                formatNoMatches: function () { //没有匹配的结果
+                    return '无符合条件的记录';
+                },
+
+                columns: [{
+                        field: 'name',
+                        title: '产品名称'
+                    },
+                    {
+                        field: 'price',
+                        title: '价格/元'
+                    },
+                    {
+                        field: 'todaySaleNum',
+                        title: '今日销量/数量'
+                    },
+                    {
+                        field: 'createTime',
+                        title: '上架时间'
+                    }, {
+                        field: 'operate',
+                        title: '操作',
+                        align: 'center',
+                        events: {
+                            //修改
+                            'click .change': function (e, value, row, index) {
+                                $('#p-id').css('display', 'block')
+                                $('.modal-body input[name=id]').val(row.id);
+                                $('.modal-body input[name=imgUrl]').val(row.imgUrl);
+                                $('.modal-body input[name=name]').val(row.name);
+                                $('.modal-body input[name=createTime]').val(row.createTime);
+                                $('.modal-body input[name=price]').val(row.price);
+                                $('.modal-body input[name=todaySaleNum]').val(row.todaySaleNum);
+                                $('#myModal').modal('show');
+                                $('#sure').css('display', 'none')
+                                $('#certain').css('display', 'block')
+                                $('#modify').text('修改')
+                                return;
+                            },
+
+                            //删除
+                            'click .delete': function (e, value, row, index) {
+                                $(this).addClass('surecacel')
+                                $('#text').text('你确定要删除“' + row.name + '”这个产品吗？')
+                                console.log($("#deletedProductId"))
+                                $("#deletedProductId").val(row.id);
+                                $('#cancelModal').modal('show');
+                            }
+                        },
+                        formatter: function (value, row, index) {
+                            return '<a class="change" href="javascript:void(0)" style="color:#11a0e7;border:0.02rem dashed #11a0e7;">修改</a> ' +
+                                '<a class="delete" href="javascript:void(0)" style="color:#e24242;border:0.02rem dashed #e24242;">下架</a>';
+                        }
+                    }
+                ]
+            });
+        }
+
+
+        //点击添加商品
+        $('.added').click(function () {
+            $('#p-id').css('display', 'none')
+            $('#modify').text('添加商品')
+            $('#myModal').modal('show');
+            $('#sure').css('display', 'block')
+            $('#certain').css('display', 'none')
+            $('.form-group').find('input').val("");
+
+        });
+        //确定添加 
+        $('#sure').click(function () {
+            var req = {
+                productId: $('.modal-content input[name=id]').val(),
+                productName: $('.modal-content input[name=name]').val(),
+                imgUrl: $('.modal-content input[name=imgUrl]').val(),
+                createTime: $('.modal-content input[name=createTime]').val(),
+                price: $('.modal-content input[name=price]').val(),
+                todaySaleNum: $('.modal-content input[name=todaySaleNum]').val(),
+            };
+            console.log(req)
+            $.ajax({
+                url: admin + '/admin/merchant/addMyProduct',
+                data: req,
+                method: 'post',
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                success: function (res) {
+                    var data = JSON.parse(res);
+                    if (data.code == 200) {
+                        $('#myModal').modal('hide');
+                        myProductsListData();
+                    } else if (data.code == 202) {
+                        window.location.href = "./login.html";
+                    } else {
+                        alert(data.desc);
+                    }
+                },
+                error: function (xhr, textStatus) {
+                    alert("网络异常")
+                }
+            });
+        });
+
+        // 确定删除
+        $('#ok').click(function () {
+            var deletedProudctId = $("#deletedProductId").val();
+            var req = {
+                productId: deletedProudctId,
+            }
+            $.ajax({
+                type: 'POST',
+                url: admin + '/admin/merchant/deleteMyProduct',
+                data: req,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (res) {
+                    var data = JSON.parse(res);
+                    if (data.code == 200) {
+                        alert("操作成功");
+                        myProductsListData();
+                    } else if (data.code == 202) {
+                        window.location.href = "./login.html";
+                    } else {
+                        alert(data.desc);
+                    }
+                },
+                error: function (xhr, textStatus) {
+                    alert("网络异常")
+                }
+            })
+            $('.surecacel').removeClass('surecacel');
+            $('#cancelModal').modal('hide');
+
+        })
+        // 确认修改
+        $('#certain').click(function () {
+            var req = {
+                productId: $('.modal-content input[name=id]').val(),
+                productName: $('.modal-content input[name=name]').val(),
+                imgUrl: $('.modal-content input[name=imgUrl]').val(),
+                createTime: $('.modal-content input[name=createTime]').val(),
+                price: $('.modal-content input[name=price]').val(),
+                todaySaleNum: $('.modal-content input[name=todaySaleNum]').val(),
+            };
+            $.ajax({
+                url: admin + '/admin/merchant/updateMyProduct',
+                data: req,
+                method: 'post',
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                success: function (res) {
+                    var data = JSON.parse(res);
+                    if (data.code == 200) {
+                        $('#myModal').modal('hide');
+                        myProductsListData();
+                    } else if (data.code == 202) {
+                        window.location.href = "./login.html";
+                    } else {
+                        alert(data.desc);
+                    }
+                },
+                error: function (xhr, textStatus) {
+                    alert("网络异常")
+                }
+            });
+        })
+    });
+</script>

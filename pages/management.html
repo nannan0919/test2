@@ -1,0 +1,666 @@
+<div class="Staffmanagement">
+    <!--搜索-->
+    <div class="search">
+        <button class="added">添加管理员</button>
+        <span style="text-align:center;margin-top:-0.7rem;font-size:0.3rem;color:#e42b4a;display:none">客户端不能添加更多管理员了！如果想添加，可以尝试删除后再添加</span>
+    </div>
+    <div class="administrator">
+        <ul>
+            <li>
+                <img src="../images/background.png" alt="" class="added">
+            </li>
+            <li>
+                <img src="../images/background.png" alt="" class="added">
+            </li>
+            <li>
+                <img src="../images/background.png" alt="" class="added">
+            </li>
+            <li>
+                <img src="../images/background.png" alt="" class="added">
+            </li>
+            <li>
+                <img src="../images/background.png" alt="" class="added">
+            </li>
+            <li>
+                <img src="../images/background.png" alt="" class="added">
+            </li>
+            <li>
+                <img src="../images/background.png" alt="" class="added">
+            </li>
+            <li>
+                <img src="../images/background.png" alt="" class="added">
+            </li>
+
+           
+        </ul>
+    </div>
+    <div class="music">
+        <div class="Top">
+            <text>音乐管理</text>
+            <button style="color:#fff;margin:0 0.1rem;border: 0.01rem solid #11a0e7;" class="addMusic">添加音乐</button>
+            <button style="background:#e42b4a;color:#fff;width:1rem;border: 0.01rem solid #e42b4a;" id="deleteMusic">删除</button>
+        </div>
+        <div class="kind">
+            <ul></ul>
+            <div style="text-align:center;margin-top:0.5rem;font-size:0.3rem;color:#e42b4a;display:none">客户端不能添加更多音乐了！如果想添加其他音乐，可以尝试删除后再添加</div>
+        </div>
+    </div>
+
+    <!--管理二维码-->
+    <div class="managecode">
+        <div class="Top">
+            <text style="margin-right:0.2rem">管理二维码</text>
+            <text>房间号</text>
+            <input type="number" placeholder="例如：1" id="roomId">
+            <text>座位号</text>
+            <input type="number" placeholder="例如：1" id="seatNo">
+            <!-- <button>生成</button> -->
+            <button type="button" id="btnEncode" onclick="encode();" style="border: 0.01rem solid #11a0e7;">生成</button>
+            <button type="button" id="remove" style="background:#e42b4a;border: 0.01rem solid #e42b4a;">清除</button>
+        </div>
+        <div class="layout">
+            <div id="code"></div>
+        </div>
+        <img id="image" src="" />
+        <div class="prom">客户端不能打印二维码</div>
+        <div class="prompt" style="display:block">
+            <text>需打印二维码请到"</text>
+            <img src="../images/pc.png" alt="">
+            <text>"pc端</text>
+        </div>
+    </div>
+
+
+    <div class="bottom">
+        <table id="detailTable" data-toggle="table"></table>
+    </div>
+    <!--是否删除-->
+    <div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="top:0.8rem">
+                <div class="modal-header">
+                    <text style="color:#fff">提示</text>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <text style="color:#797979;" id="warning"></text>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary con" id="ok" style="margin-left:5rem;height:0.7rem">确认</button>
+                    <button type="button" class="btn btn-primary con" id="OK" style="margin-left:5rem;height:0.7rem">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 添加管理员成功 -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="top:0.8rem">
+                <div class="modal-header" style="background:#11a0e7">
+                    <text style="color:#fff">添加管理员</text>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <form class="form-horizontal">
+                        <input type="text" name="id" class="form-control" style="display:none">
+                        <div class="form-group">
+                            <label class="control-label">用户名</label>
+                            <input type="text" name="username" class="form-control" id="useName">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">密码</label>
+                            <input name="password" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">真实姓名</label>
+                            <input list="country" name="realName" type="text" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">电话</label>
+                            <input type="number" name="phone" class="form-control">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary con" id="certain" style="margin-left:5rem;height:0.7rem">确认</button>
+                    <button type="button" class="btn btn-primary con" id="sure" style="margin-left:5rem;background:#11a0e7;height:0.7rem" ;>添加</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 添加音乐成功 -->
+    <div class="modal fade" id="myMusic" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="top:0.8rem">
+                <div class="modal-header" style="background:#11a0e7">
+                    <text style="color:#fff">添加音乐</text>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" enctype="multipart/form-data" method="post" id="uploadForm">
+                        <div class="form-group">
+                            <label class="control-label">音乐名称</label>
+                            <input type="text" name="name" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">音乐路径</label>
+                            <input type="file" name="musicUrl" class="form-control" id="btn_file" multiple style="display: none">
+                            <input type="text" name="musicUrl" class="form-control" id="importPicName">
+
+                            <button type="button" onclick="$('#btn_file').click();">选择文件</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary con" id="file_upload" style="margin-left:5rem;height:0.7rem;">上传</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--如果登录过期提示-->
+    <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="width:3rem;height:2rem;left:50%;transform:translateX(-50%);top:2.5rem;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary con" id="sure" style="position:absolute;bottom:0.25rem;left:75%;">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    $(function () {
+        $.cookie("sessionId");
+        // 输入框聚焦边框变色
+        $("input").focus(function () {
+            $("input").css("border-color", "#c4d1d6");
+            $(this).css("border-color", "#11a0e7");
+        });
+        var data,length;
+        // 管理员列表数据
+        function staListData() {
+            req = {};
+            $.ajax({
+                type: 'POST',
+                url: admin + "/admin/merchant/staffList",
+                data: req,
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                success: function (res) {
+                    data = JSON.parse(res);
+                    console.log(data)
+                    var content = '';
+                    $.each(data.data.list, function (index, element) {
+                        if (data.data.list) {
+                            content =
+                                '<img src="../images/p.png" alt=""><div><div><text style="font-size:0.26rem;color:#030303" id="username">' +
+                                data.data.list[index].realName +
+                                '</text><text style="font-size:0.2rem;color:#11a0e7;margin-left:0.25rem;" class="modify">修改</text><text class="delete"><img src="../images/del.png" alt=""></text></div><div style="margin:0.1rem 0rem"><text>角色介绍:</text><text>' +
+                                data.data.list[index].roleDesc +
+                                '</text></div><div><text>联系电话:</text><text id="phone">' +
+                                data.data.list[
+                                    index].phone +
+                                '</text></div></div><b style="display:none">' +
+                                data.data.list[index].username +
+                                '</b><s style="display:none">' + data.data
+                                .list[index].password + '</s><i style="display:none">' +
+                                data.data.list[index].id +
+                                '</i>'
+                            $('.administrator ul li').eq(index).html(content);
+                        }
+                    })
+                    if (data.code == 200) {
+                        length=data.data.list.length;
+                    } else if (data.code == 202) {
+                        window.location.href = './login.html';
+                    } else {
+                        console.log('失败')
+                    }
+                },
+                error: function (xhr, textStatus) {
+                    alert("网络异常")
+                }
+            })
+        }
+        staListData();
+
+        //确定添加管理员
+        function addMana(){
+            if (length == 8) {
+                $(this).attr('disabled');
+                $('.search>span').fadeIn(500);
+                setTimeout(function () {
+                    $('.search>span').fadeOut(500);
+                }, 5000)
+            } else {
+                $('#myModal').modal('show');
+            }
+            $('#myModal text').text('添加管理员')
+            $('#sure').css('display', 'block')
+            $('#certain').css('display', 'none')
+            $('.form-group').find('input').val("");
+            $('#useName').attr('disabled', false);
+        }
+        $('.administrator').on('click','.added',function(){
+            addMana();
+        })
+        $('.added').click(function () {
+            addMana();
+        })
+        
+        $('#sure').click(function () {
+            var req = {
+                username: $('.modal-content input[name=username]').val(),
+                productId: $('.modal-content input[name=id]').val(),
+                realName: $('.modal-content input[name=realName]').val(),
+                password: $('.modal-content input[name=password]').val(),
+                createTime: $('.modal-content input[name=createTime]').val(),
+                phone: $('.modal-content input[name=phone]').val(),
+                role: $('.modal-content input[name=role]').val(),
+                roleDesc: $('.modal-content input[name=roleDesc]').val(),
+                updateTime: $('.modal-content input[name=updateTime]').val(),
+            };
+            $.ajax({
+                url: admin + '/admin/merchant/addStaffInfo',
+                data: req,
+                method: 'post',
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                success: function (res) {
+                    var data = JSON.parse(res);
+                    if (data.code == 200) {
+                        $('#myModal').modal('hide');
+                        staListData()
+                    } else if (data.code == 202) {
+                        window.location.href = './login.html';
+                    } else {
+                        console.log(data);
+                    }
+                },
+                error: function (xhr, textStatus) {
+                    alert("网络异常")
+                }
+            });
+        })
+
+        // 删除
+        var id;
+        $('.administrator').on('click', '.delete', function () {
+            id = $(this).parent().parent().parent('li').find('i').text(); //id
+            var username = $(this).parent().parent().parent('li').find('#username').text(); //真实姓名
+            $('#warning').text('你确定要删除“' + username + '”这个管理员吗？');
+            $('#cancelModal').modal('show');
+            $('#ok').css('display', 'block');
+            $('#OK').css('display', 'none');
+        })
+        $('#ok').click(function () {
+            $('#cancelModal').modal('hide');
+            req = {
+                id: id
+            }
+            $.ajax({
+                url: admin + '/admin/merchant/deleteStaffInfo',
+                data: req,
+                method: 'post',
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                success: function (res) {
+                    var data = JSON.parse(res);
+                    console.log(data);
+                    if (data.code == 200) {
+                        $('#myModal').modal('hide');
+                        $('.administrator li').html('<img src="../images/background.png" alt="" class="added">')
+                        staListData();
+                    } else {
+                        console.log(data);
+                    }
+                },
+                error: function (xhr, textStatus) {
+                    alert("网络异常")
+                }
+            });
+
+        })
+        // 修改管理员
+        $('.administrator').on('click', '.modify', function () {
+            $('#useName').attr('disabled', true)
+            var realName = $(this).parent().parent().parent('li').find('b').text(); //用户名
+            var password = $(this).parent().parent().parent('li').find('s').text(); //密码
+            var username = $(this).parent().parent().parent('li').find('#username').text(); //真实姓名
+            var phone = $(this).parent().parent().parent('li').find('#phone').text(); //电话
+            var id = $(this).parent().parent().parent('li').find('i').text(); //id
+            $('.modal-body input[name=id]').val(id);
+            $('.modal-body input[name=username]').val(realName);
+            $('.modal-body input[name=password]').val(password);
+            $('.modal-body input[name=realName]').val(username);
+            // $('.modal-body input[name=createTime]').val(row.createTime);
+            $('.modal-body input[name=phone]').val(phone);
+            // $('.modal-body input[name=role]').val(row.role);
+            // $('.modal-body input[name=roleDesc]').val(roleDesc);
+            // $('.modal-body input[name=updateTime]').val(row.updateTime);
+            $('#myModal').modal('show');
+            $('#myModal text').text('修改')
+            $('#sure').css('display', 'none')
+            $('#certain').css('display', 'block')
+            return;
+        })
+        // 确认修改
+        $('#certain').click(function () {
+            var req = {
+                id: $('.modal-content input[name=id]').val(),
+                realName: $('.modal-content input[name=realName]').val(),
+                password: $('.modal-content input[name=password]').val(),
+                // createTime: $('.modal-content input[name=createTime]').val(),
+                phone: $('.modal-content input[name=phone]').val(),
+                // role: $('.modal-content input[name=role]').val(),
+                // roleDesc: $('.modal-content input[name=roleDesc]').val(),
+                // updateTime: $('.modal-content input[name=updateTime]').val(),
+                username: $('.modal-content input[name=username]').val(),
+            };
+            $.ajax({
+                url: admin + '/admin/merchant/updateStaffInfo',
+                data: req,
+                method: 'post',
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                success: function (res) {
+                    var data = JSON.parse(res);
+                    if (data.code == 200) {
+                        console.log(data);
+                        $('#myModal').modal('hide');
+                        staListData()
+                    } else if (data.code == 202) {
+                        window.location.href = './login.html';
+                    } else {
+                        alert(data.desc);
+                    }
+                },
+                error: function (xhr, textStatus) {
+                    alert("网络异常")
+                }
+            });
+        });
+
+        // 音乐列表数据
+        var musicId, name;
+
+        function musicListData() {
+            req = {};
+            $.ajax({
+                type: 'POST',
+                url: admin + "/admin/merchant/musicList",
+                data: req,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (res) {
+                    data = JSON.parse(res);
+                    console.log(data.data.list)
+                    var content = '';
+                    for (var i = 0; i < data.data.list.length; i++) {
+                        content += '<li><b style="display:none">' +
+                            data.data.list[i].musicId + '</b><text id="name">' + data.data.list[i].name +
+                            '</text><text>匿名</text><text>mp3</text><span><text></text></span></li>'
+                    }
+                    if (data.code == 200) {
+                        $('.kind ul').html(content);
+                    } else if (data.code == 202) {
+                        window.location.href = './login.html';
+                    } else {
+                        console.log('失败')
+                    }
+                },
+                error: function (xhr, textStatus) {
+                    alert("网络异常")
+                }
+            })
+        }
+        musicListData();
+
+        // 管理音乐（添加）
+        $('.addMusic').click(function () {
+            $('#sure').css('display', 'block')
+            $('.form-group').find('input').val("");
+            if ($('.kind li').length == 5) {
+                $('.kind>div').css('display', 'block')
+            } else {
+                $('#myMusic').modal('show');
+            }
+        })
+        // 显示上传文件
+        $('body').on('change', $('#btn_file'), function () {
+            $("#importPicName").val($("#btn_file").val());
+        });
+        // 判断格式
+        $("#btn_file").change(function () {
+            var filepath = $("input[name='musicUrl']").val();
+            var extStart = filepath.lastIndexOf(".");
+            var ext = filepath.substring(extStart, filepath.length).toUpperCase();
+            if (ext == ".mp3" || ext == ".MP3") {
+                $("#importPicName").text(ext)
+            } else {
+                alert("仅限于上传mp3格式");
+                $("#importPicName").text("")
+                $("#importPicName").text("");
+                return false;
+            }
+        });
+        // 上传        
+        $('#file_upload').click(function () {
+            $('#myMusic').modal('hide')
+            var formData = new FormData($("#uploadForm")[0]);
+            $.ajax({
+                type: "post",
+                url: admin + '/admin/merchant/uploadMusic',
+                data: formData,
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                processData: false,
+                contentType: false,
+                success: function (res) {
+                    var data = jQuery.parseJSON(res);
+                    if (data.code == 200) {
+
+                        var url = data.data.url;
+                        var req = {
+                            name: $("input[name='name']").val(),
+                            link: data.data.url
+                        };
+                        $.ajax({
+                            type: "post",
+                            url: admin + '/admin/merchant/addMusic',
+                            data: req,
+                            xhrFields: {
+                                withCredentials: true
+                            },
+                            crossDomain: true,
+                            contentType: "application/x-www-form-urlencoded",
+                            success: function (res) {
+                                var data = jQuery.parseJSON(res);
+                                if (data.code == 200) {
+                                    alert("上传文件成功");
+                                    $('#myModal').modal('hide');
+                                    musicListData();
+                                } else if (data.code == 202) {
+                                    window.location.href = './login.html';
+                                } else {
+                                    alert(data.desc);
+                                }
+                            },
+                            error: function () {
+                                console.log("查询异常，请稍后重试！");
+                            }
+                        });
+
+                    } else if (data.code == 202) {
+                        window.location.href = './login.html';
+                    } else {
+                        console.log(data)
+                    }
+                },
+                error: function () {
+                    console.log("查询异常，请稍后重试！");
+                }
+            });
+        })
+        //删除音乐
+        $('#deleteMusic').click(function () {
+            $('#cancelModal').modal('show')
+            $('#OK').css('display', 'block');
+            $('#ok').css('display', 'none');
+            $('#warning').text('你确定要删除"' + name + '"这首歌吗？');
+
+        })
+        $('#OK').click(function () {
+            $('.kind>div').css('display', 'none')
+            $('#cancelModal').modal('hide');
+            req = {
+                musicId: musicId
+            };
+            $.ajax({
+                type: 'POST',
+                url: admin + "/admin/merchant/deleteMusic",
+                data: req,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (res) {
+                    data = JSON.parse(res);
+                    console.log(data)
+                    if (data.code == 200) {
+                        musicListData();
+                    } else if (data.code == 202) {
+                        window.location.href = './login.html';
+                    } else {
+                        console.log('失败')
+                    }
+                },
+                error: function (xhr, textStatus) {
+                    alert("网络异常")
+                }
+            })
+        })
+        $('.kind').on('click', 'li', function () {
+            $(this).find('span').find('text').css('display', 'block')
+            $(this).siblings().find('span').find('text').css('display', 'none')
+            musicId = $(this).find('b').text();
+            name = $(this).find('#name').text();
+        })
+    });
+
+
+    // 二维码
+    var merchantId = 1;
+    var domainUrl = 1;
+
+    function encode() {
+        $('.prompt').css({
+            'margin-top': '0rem'
+        });
+        var roomId = $('#roomId').val();
+        var seatNo = $('#seatNo').val();
+        var url = domainUrl + "?" + `seatNo=${seatNo}&merchantId=${merchantId}&roomId=${roomId}`;
+        url = toUtf8(url);
+        $("#code").qrcode({
+            render: "canvas", //table方式
+            width: 120, //宽度
+            height: 120, //高度
+            text: url //任意内容
+        });
+        $('.layout').prepend("<div class='Encode'></div>");
+        if ($('.layout>div').length >= 4) {
+            $('.prom').css({
+                'display': 'block',
+                'margin-top': '0rem'
+            });
+            $('#btnEncode').attr("disabled", true);
+        }
+        $('.layout>div:first').append($('canvas:last')).prepend(
+            `<div>房间号：${roomId}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;桌号：${seatNo}</div>`)
+    }
+    // 清除二维码
+    $('#remove').click(function () {
+        $('.layout>.Encode').remove();
+        $('#btnEncode').attr("disabled", false);
+        $('.Top input').val('');
+        $('.prompt').css({
+            'margin-top': '2.3rem'
+        });
+        $('.prom').css({
+            'display': 'none'
+        });
+
+    })
+
+    function toUtf8(str) {
+        var out, i, len, c;
+        out = "";
+        len = str.length;
+        for (i = 0; i < len; i++) {
+            c = str.charCodeAt(i);
+            if ((c >= 0x0001) && (c <= 0x007F)) {
+                out += str.charAt(i);
+            } else if (c > 0x07FF) {
+                out += String.fromCharCode(0xE0 | ((c >> 12) & 0x0F));
+                out += String.fromCharCode(0x80 | ((c >> 6) & 0x3F));
+                out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
+            } else {
+                out += String.fromCharCode(0xC0 | ((c >> 6) & 0x1F));
+                out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
+            }
+        }
+        return out;
+    }
+
+    function getQRCodeNeedInfo() {
+        var req = {};
+        $.ajax({
+            url: admin + '/admin/merchant/getQRCodeNeedInfo',
+            data: req,
+            method: 'post',
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
+            success: function (res) {
+                var data = JSON.parse(res);
+                if (data.code == 200) {
+                    merchantId = data.data.merchantId;
+                    domainUrl = data.data.domain;
+                } else if (data.code == 202) {
+                    window.href.location = "./login.html";
+                } else {
+                    alert(data.desc);
+                }
+            },
+            error: function (xhr, textStatus) {
+                alert("网络异常，请稍后重试")
+            }
+        });
+    }
+</script>

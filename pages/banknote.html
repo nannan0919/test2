@@ -1,0 +1,229 @@
+<div class="banknote">
+    <!-- 顶部 -->
+    <div id="top" class="search">
+        <text style="margin-left:0.4rem;color:#11a0e7;" id="recruitList">结算中心</text>
+        <text style="color:#d9d9d9;margin:0 0.15rem">|</text>
+        <text style="margin-right:1rem" id="recruitPer">提现记录</text>
+        <input name="" class="form-control datetime-picker" placeholder="开始时间" id="beginTime" readonly>
+        <input name="" class="form-control datetime-picker" placeholder="结束时间" id="endTime" readonly>
+        <input type="button" name="" value="查询" class="chazhao">
+        <input type="button" name="" value="导出" class="daochu">
+        <span style="float:right;" id="account">
+            <text>账目共计：</text>
+            <text>9000</text>
+            <input type="button" name="" value="提现" class="tixian">
+        </span>
+    </div>
+
+    <!-- 结算中心 -->
+    <div class="recruitmoment">
+        <div class="bottom">
+            <table id="detailTable" data-toggle="table"></table>
+        </div>
+    </div>
+    <div class="modal fade" id="backModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="top:0.8rem">
+                <div class="modal-header">
+                    <text style="color:#fff">提示</text>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div>确定提现：
+                            <text style="color:#11a0e7">2018-02-05 2018-02-10</text>
+                    </div>
+                   <div>
+                    <text style="color:#040404">实际金额：</text>
+                    <text style="color:#797979">9600</text>
+                   </div>
+                   <div>
+                    <text style="color:#040404">服务费：</text>
+                    <text style="color:#797979">-200</text>
+                   </div>
+                   <div>
+                    <text style="color:#040404">税费：</text>
+                    <text style="color:#797979">-400</text>
+                   </div>
+                   <div>
+                    <text style="color:#040404">实收总额：</text>
+                    <text style="color:#797979">9000</text>
+                   </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary con" id="sure">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="success" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <img src="../images/success.png" alt="">
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $.cookie("sessionId");
+        $('.datetime-picker').datetimepicker({
+            format: 'yyyy-mm-dd hh:ii:00',
+            language: 'zh-CN',
+            autoclose: true,
+            todayHighlight: true,
+            todayBtn: true,
+            keyboardNavigation: true
+        });
+        var itemInfo, data, eventStatus, beginTime, currentPage = 1;
+        // 点击提现记录
+        $('#recruitPer').click(function () {
+            $(".content").load("account.html");
+        })
+        // 初始化数据
+        orderListData();
+        $('.tixian').click(function () {
+            $('#backModal').modal('show')
+        })
+        $('#sure').click(function(){
+            req = {
+                currentPage: currentPage,
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: admin + "/admin/merchant/orderList",
+                data: req,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (res) {
+                    data = JSON.parse(res);
+                    console.log(data)
+                    if (data.code == 200) {
+                        $('#backModal').modal('hide')
+                    } else if (data.code == 202) {
+                        window.location.href = './login.html';
+                    } else {
+                        console.log('失败')
+                    }
+                },
+                error: function (xhr, textStatus) {
+                    alert("网络异常")
+                }
+            })
+        })
+        function orderListData() {
+            req = {
+                currentPage: currentPage,
+                beginTime: beginTime,
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: admin + "/admin/merchant/orderList",
+                data: req,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (res) {
+                    data = JSON.parse(res);
+                    console.log(data)
+                    if (data.code == 200) {
+                        itemInfo = data;
+                        initTable()
+                        //分页
+                        $('#box').paging({
+                            initPageNo: itemInfo.data.paginationInfo.currentPage, // 初始页码
+                            totalPages: itemInfo.data.paginationInfo.totalPage, //总页数
+                            totalCount: '合计' + itemInfo.data.paginationInfo.totalRecord +
+                                '条数据', // 条目总数
+                            jump: true, //是否支持跳转
+                            callback: function (page) { // 回调函数
+                                currentPage = page;
+                            }
+                        })
+                    } else if (data.code == 202) {
+                        window.location.href = './login.html';
+                    } else {
+                        console.log('失败')
+                    }
+                },
+                error: function (xhr, textStatus) {
+                    alert("网络异常")
+                }
+            })
+        }
+        // 跳转数据页码
+        $('.recruitmoment').on('click', '#jumpText', function () {
+            var $inp = $('#jumpText:text');
+            $inp.bind('keydown', function (e) {
+                var key = e.which;
+                if (key == 13) {
+                    if (currentPage == $inp.val() || $inp.val() > itemInfo.data.paginationInfo.totalPage) {
+                        e.preventDefault();
+                    } else {
+                        e.preventDefault();
+                        currentPage = $inp.val();
+                        orderListData();
+                    }
+                }
+            });
+        })
+        $('.recruitmoment').on('click', '.jumpPage', function () {
+            currentPage = currentPage;
+            orderListData();
+        })
+
+        //查找
+        $('.chazhao').click(function () {
+            var key = $("#beginTime").val();
+            console.log('结算中心')
+            beginTime = key;
+            orderListData();
+        });
+    function initTable() {
+            $('#detailTable').bootstrapTable('destroy').bootstrapTable({
+                contentType: "application/x-www-form-urlencoded",
+                data: itemInfo.data.orderList,
+                dataField: "rows", //这是返回的json数组的key.默认好像是"rows".这里只有前后端约定好就行
+                pagination: true, //分页
+                sidePagination: "server", //服务端处理分页
+                paginationLoop: false,
+                showPaginationSwitch: false, //是否显示数据条数选择框
+                pageNumber: 1,
+                pageSize: 10,
+                pageList: [10],
+
+                formatLoadingMessage: function () {
+                    return "请稍等，正在查询中...";
+                },
+
+                formatNoMatches: function () { //没有匹配的结果
+                    return '无符合条件的记录';
+                },
+                columns: [{
+                        field: 'orderTime',
+                        title: '账目时间'
+                    },
+                    {
+                        field: 'orderAmount',
+                        title: '门票明细'
+                    },
+                    {
+                        field: 'orderAmount',
+                        title: '钻石明细'
+                    },
+                    {
+                        field: 'orderAmount',
+                        title: '商品明细'
+                    },
+                    {
+                        field: 'orderAmount',
+                        title: '共计'
+                    },
+                ]
+            });
+        }
+    })
+</script>

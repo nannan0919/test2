@@ -1,0 +1,255 @@
+<!--搜索-->
+<div class="order">
+    <div class="search chaxun">
+        <input type="number" name="" placeholder="会员号" id="cardNo">
+        <input type="number" name="" placeholder="订单号" id="orderId">
+        <input type="text" name="" placeholder="开始时间" class="form-control datetime-picker" id="beginTime" style="width:3.5rem" readonly>
+        <input type="text" name="" placeholder="结束时间" class="form-control datetime-picker"  id="endTime" style="width:3.5rem" readonly>
+        <select name="" id="orderSel">
+            <option value="-1">全部</option>
+            <option value="0">待 支 付</option>
+            <option value="1">已 支 付</option>
+            <option value="2">已 消 费</option>
+            <option value="3">已 取 消</option>
+        </select>
+        <input type="button" name="" value="查询" class="chazhao">
+        <input type="button" name="" value="导出" class="daochu">
+    </div>
+    <div class="bottom">
+        <table id="detailTable" data-toggle="table"></table>
+    </div>
+    <!--如果登录过期提示-->
+    <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="width:3rem;height:2rem;left:50%;transform:translateX(-50%);top:2.5rem;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary con" id="sure" style="position:absolute;bottom:0.25rem;left:75%;">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+        $.cookie("sessionId");
+        $('.datetime-picker').datetimepicker({
+            format: 'yyyy-mm-dd hh:ii:00',
+            language: 'zh-CN',
+            autoclose: true,
+            todayHighlight: true,
+            todayBtn: true,
+            keyboardNavigation: true
+        });
+        // 输入框聚焦边框变色
+        $("input").focus(function () {
+            $("input").css("border-color", "#c4d1d6");
+            $(this).css("border-color", "#11a0e7");
+        });
+        var itemInfo, data, currentPage, cardNo, orderId,status, beginTime,endTime;
+
+        function orderListData() {
+            req = {
+                cardNo: cardNo,
+                orderStatus:status,
+                orderId: orderId,
+                beginTime: beginTime,
+                endTime: endTime,
+                currentPage: currentPage
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: admin + "/admin/merchant/orderList",
+                data: req,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (res) {
+                    data = JSON.parse(res);
+                    console.log(data)
+                    if (data.code == 200) {
+                        itemInfo = data;
+                        initOperHisTable();
+                        //分页
+                        $('#box').paging({
+                            initPageNo: itemInfo.data.paginationInfo.currentPage, // 初始页码
+                            totalPages: itemInfo.data.paginationInfo.totalPage, //总页数
+                            // totalPages:10, ///总页数
+                            totalCount: '合计' + itemInfo.data.paginationInfo.totalRecord +
+                                '条数据', // 条目总数
+                            // slideSpeed: 600, // 缓动速度。单位毫秒
+                            jump: true, //是否支持跳转
+                            callback: function (page) { // 回调函数
+                                currentPage = page;
+                            }
+                        })
+                    } else if (data.code == 202) {
+                        window.location.href = './login.html';
+                    } else {
+                        console.log('失败')
+                    }
+                },
+                error: function (xhr, textStatus) {
+                    alert("网络异常")
+                }
+            })
+        }
+        orderListData()
+        //查找
+        $(".chazhao").click(function () {
+            var key = $("#cardNo").val();
+            var key1 = $("#orderId").val();
+            var key2 = $("#beginTime").val();
+            var key3 = $("#endTime").val();
+            if ($("#orderSel option:selected").text() == '待 支 付') {
+                    status = 0
+                } else if ($("#orderSel option:selected").text() == '已 支 付') {
+                    status = 1
+                }
+                else if ($("#orderSel option:selected").text() == '已 取 消') {
+                    status = 3
+                }
+                else if ($("#orderSel option:selected").text() == '已 消 费') {
+                    status = 2
+                } else {
+                    status = -1
+                }
+            cardNo = key;
+            orderId = key1;
+            beginTime = key2;
+            endTime = key3;
+            orderListData();
+        });
+        // 跳转数据页码
+        $('.order').on('click', '#jumpText', function () {
+            var $inp = $('#jumpText:text');
+            $inp.bind('keydown', function (e) {
+                var key = e.which;
+                if (key == 13) {
+                    if (currentPage == $inp.val() || $inp.val() > itemInfo.data.paginationInfo.totalPage) {
+                        e.preventDefault();
+                    } else {
+                        e.preventDefault();
+                        currentPage = $inp.val();
+                        orderListData()
+                    }
+                }
+            });
+        })
+        var currentPage = 1;
+        $('.order').on('click', '.jumpPage', function () {
+            currentPage = currentPage;
+            orderListData();
+        })
+        // 数据表格
+        function initOperHisTable() {
+            $('#detailTable').bootstrapTable('destroy').bootstrapTable({
+                data: itemInfo.data.orderList,
+                // method: 'post',
+                contentType: "application/x-www-form-urlencoded",
+                dataField: "rows", //这是返回的json数组的key.默认好像是"rows".这里只有前后端约定好就行
+                pagination: true, //分页
+                sidePagination: "server", //服务端处理分页
+                paginationLoop: false,
+                showPaginationSwitch: false, //是否显示数据条数选择框
+                pageNumber: 1,
+                pageSize: 10,
+                pageList: [10],
+                showExport: true,
+                formatLoadingMessage: function () {
+                    return "请稍等，正在查询中...";
+                },
+
+                formatNoMatches: function () { //没有匹配的结果
+                    return '无符合条件的记录';
+                },
+                columns: [{
+                        field: 'cardNo',
+                        title: '会员号'
+                    }, {
+                        field: 'orderId',
+                        title: '订单号'
+                    }, {
+                        field: 'orderAmount',
+                        title: '订单金额'
+                    },
+                    {
+                        field: 'orderName',
+                        title: '订单名称'
+                    },
+                    {
+                        field: 'orderStatus',
+                        title: '订单状态'
+                    },
+                    {
+                        field: 'orderType',
+                        title: '订单类型'
+                    },
+                    {
+                        field: 'payType',
+                        title: '付款类型'
+                    },
+                    {
+                        field: 'paySuccessTime',
+                        title: '付款成功时间'
+                    },
+                    {
+                        field: 'operate',
+                        title: '操作',
+                        align: 'center',
+                        // events: operateUser,
+                        formatter: function (value, row, index) {
+                            if (row.orderStatusCode == 1) {
+                                return '<a class="dispatch" href="javascript:void(0)">派 单</a>'
+                            }
+                            if (row.orderStatusCode == 2) {
+                                return '<a class="dispatchdone" href="javascript:void(0)">已派单</a>'
+                            }
+
+                        },
+                        events: {
+                            //派单
+                            'click .dispatch': function (e, value, row, index) {
+                                var req = {
+                                    orderId: row.orderId
+                                }
+
+                                $.ajax({
+                                    url: admin + '/admin/merchant/updateOrderUsed',
+                                    data: req,
+                                    method: 'post',
+                                    xhrFields: {
+                                        withCredentials: true
+                                    },
+                                    success: function (res) {
+                                        var data = JSON.parse(res);
+                                        console.log(data)
+                                        if (data.code == 200) {
+                                            toastr.success(data.desc);
+                                            orderListData();
+                                        } else if (data.code == 202) {
+                                            window.location.href ="./login.html";
+                                        } else {
+                                            alert(data.desc);
+                                        }
+                                    },
+                                    error: function (xhr, textStatus) {
+                                        alert("网络异常，请稍后重试！")
+                                    }
+                                });
+                            },
+                        },
+                    },
+                ]
+            });
+        }
+    });
+</script>

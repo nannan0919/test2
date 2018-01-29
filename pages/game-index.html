@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>首页</title>
+    <!--浏览器标签前的小图标-->
+    <!--<link rel="icon" href="../images/close.png" type="image/x-icon"/>-->
+    <link rel="stylesheet" href='../css/toast/toast.css'>
+    <script src="../js/game-js/rem1.js"></script>
+    <link rel="stylesheet" href="../css/game-css/index.css">
+    <script src="../js/game-js/jquery-2.1.1.js"></script>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="../css/bootstrap-css/bootstrap.css">
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="../js/bootstrap-js/bootstrap.min.js"></script>
+    <script src="../js/toast/toast.js"></script>
+    <script src="../js/base.js"></script>
+    <script src="../js/game-js/index.js" id="index"></script>
+</head>
+<!--loading样式-->
+<style>
+    #loading {
+        height: 100%;
+        width: 100%;
+        position: fixed;
+        margin-top: 0px;
+        top: 0px;
+        z-index: 100000;
+        background: rgba(0, 0, 0, 0.5);
+    }
+
+    #loading-center {
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+
+    #loading-center-absolute {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        height: 150px;
+        width: 150px;
+        margin-top: -75px;
+        margin-left: -75px;
+    }
+
+    #loading-center-absolute>p{
+        position: absolute;
+        bottom:-0.8rem;
+        color: #fff;
+        left:0;
+        right:0;
+        margin: auto;
+        text-align: center;
+    }
+</style>
+<body style="display: none;">
+<div class="body">
+    <div class="game_type">
+    	<a href="./AllPage.html">
+            <img class="close" src="../images/return.png" alt="">
+        </a>
+        <!--输入房间号-->
+        <div class="home_num">
+            <div class="tables">房间号</div>
+            <!--<div contenteditable="true"></div>-->
+            <!-- <input type="number"> -->
+            <select name="" id="roomId">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+            </select>
+        </div>
+        <!--房间类型-->
+        <div class="home_type">
+            <!--六人赛场-->
+            <div class="six">
+                <div class="num_of">
+                    6 人 赛 场
+                </div>
+            </div>
+            <input name="six" type="radio" value="6"/>
+            <!--十人赛场-->
+            <div class="ten">
+                <div class="num_of">
+                    9 人 赛 场
+                </div>
+            </div>
+            <input name="ten" type="radio" value="9"/>
+            <!--十二人赛场-->
+            <div class="twelve">
+                <div class="num_of">
+                    12 人 赛 场
+                </div>
+            </div>
+            <input name="twelve" type="radio" value="12"/>
+            <!--十五人赛场-->
+            <div class="fifteen">
+                <div class="num_of">
+                    15 人 赛 场
+                </div>
+            </div>
+            <input name="fifteen" type="radio" value="15"/>
+            <!--自定义赛场-->
+            <div class="ding">
+                <div class="num_of">
+                    自定义
+                </div>
+            </div>
+            <input name="fifteen" type="radio" value="-1"/>
+        </div>
+        <!--房间信息-->
+        <div class="home_info">
+            <span></span> <span></span>
+        </div>
+        <!--刷新房间信息-->
+        <img id="f5" src="../images/f5.png" alt="">
+    </div>
+    <!--音乐 玩家 综合信息-->
+    <div class="pack">
+        <div class="left">
+            <!--音乐-->
+            <div class="music">
+                <div class="header">
+                    <img src="../images/music.png" alt="">音乐
+                </div>
+                <audio src=""></audio>
+                <!--音乐列表-->
+                <div class="list">
+                    您还没有添加音乐
+                </div>
+            </div>
+            <!--综合信息-->
+            <div class="info">
+                <div class="title">综合信息</div>
+                <div class="player_info">
+                    <div class="active">还没有玩家进入房间</div>
+                </div>
+            </div>
+        </div>
+        <div class="right">
+            <!--编辑角色-->
+            <div class="edits_box">
+                <ul class="roles">
+                    <li>
+                        <div class="role_info">
+                            <div>狼人</div>
+                            <input type="text" name="wolf" value="0" disabled="disabled">
+                        </div>
+                        <div class="as">
+                            <div class="add">
+                                <img src="../images/add1.png" alt="">
+                            </div>
+                            <div class="reduce">
+                                <img src="../images/reduce.png" alt="">
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="role_info">
+                            <div>平民</div>
+                            <input type="text" name="villager" value="0" disabled="disabled">
+                        </div>
+                        <div class="as">
+                            <div class="add">
+                                <img src="../images/add1.png" alt="">
+                            </div>
+                            <div class="reduce">
+                                <img src="../images/reduce.png" alt="">
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="role_info seer">
+                            预言家
+                        </div>
+                        <div class="as">
+                            <img src="../images/not.png" alt="">
+                            <input type="number" name="seer" value="0">
+                        </div>
+                    </li>
+                    <li>
+                        <div class="role_info witch">
+                            女巫
+                        </div>
+                        <div class="as">
+                            <img src="../images/not.png" alt="">
+                            <input type="number" name="witch" value="0">
+                        </div>
+                    </li>
+                    <li>
+                        <div class="role_info hunter">
+                            猎人
+                        </div>
+                        <div class="as">
+                            <img src="../images/not.png" alt="">
+                            <input type="number" name="hunter" value="0">
+                        </div>
+                    </li>
+                    <li>
+                        <div class="role_info guard">
+                            守卫
+                        </div>
+                        <div class="as">
+                            <img src="../images/not.png" alt="">
+                            <input type="number" name="guard" value="0">
+                        </div>
+                    </li>
+                    <li>
+                        <div class="role_info idiot">
+                            白痴
+                        </div>
+                        <div class="as">
+                            <img src="../images/not.png" alt="">
+                            <input type="number" name="idiot" value="0">
+                        </div>
+                    </li>
+                    <li>
+                        <div class="role_info cupid">
+                            丘比特
+                        </div>
+                        <div class="as">
+                            <img src="../images/not.png" alt="">
+                            <input type="number" name="cupid" value="0">
+                        </div>
+                    </li>
+                    <li>
+                        <div class="role_info whiteKingWolf">
+                            白狼王
+                        </div>
+                        <div class="as">
+                            <img src="../images/not.png" alt="">
+                            <input type="number" name="whiteKingWolf" value="0">
+                        </div>
+                    </li>
+                </ul>
+                <div class="clone">
+                    <div class="left">
+                        <img src="../images/not.png" alt="">
+                        重复玩家
+                    </div>
+                    <div class="right">
+                        <i>?</i>
+                        获取上局游戏所有玩家信息
+                    </div>
+                </div>
+                <div class="Establish">
+                    <div class="dete">创建</div>
+                    <div>取消</div>
+                </div>
+            </div>
+            <!--弹框-->
+            <div class="pack">
+                <div class="alerts">
+                    <div>您有一场未结束赛事</div>
+                    <div>
+                        <div class="end">结束</div>
+                        <div class="into">进入</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="seat">
+                <!--座位布局-->
+                <div class="six_home"></div>
+            </div>
+            <div class="play">
+                <div class="mask">
+                    <div class="endtime">
+                        <div style='background: -webkit-linear-gradient(left, rgba(250,38,38,0) , rgba(250,38,38,0.6),rgba(250,38,38,0));'></div>
+                        <div class='one'
+                             style='background: -webkit-linear-gradient(left,rgba(222,28,28,0),rgba(222,28,28,0.3),rgba(222,28,28,0));'></div>
+                        <div class='two'
+                             style='background: -webkit-linear-gradient(left,rgba(222,28,28,0),rgba(222,28,28,0.3),rgba(222,28,28,0));'>
+                            等待玩家抢角色
+                        </div>
+                        <div style='background: -webkit-linear-gradient(left,rgba(250,38,38,0),rgba(250,38,38,0.6),rgba(250,38,38,0));'></div>
+                    </div>
+                </div>
+                <a class="plays" href="#">
+                    开始游戏
+                </a>
+            </div>
+        </div>
+
+        <!--同步加载图片-->
+        <div style="display: none">
+            <img src="../images/selected.png" alt="">
+            <img src="../images/suspend.png" alt="">
+            <img src="../images/play.png" alt="">
+            <img src="../images/t.png" alt="">
+        </div>
+    </div>
+</div>
+
+<div class="musicqwe" style="display: none"></div>
+
+<!--loading-->
+<div id="loading" style="display: none">
+    <div id="loading-center">
+        <div id="loading-center-absolute">
+            <img style="width: 100%;height: 100%" src="../images/1.gif" alt="">
+            <p>音乐资源加载中</p>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

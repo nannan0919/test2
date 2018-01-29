@@ -1,0 +1,569 @@
+<div class="recruitList">
+    <!-- 顶部 -->
+    <div id="top" class="search">
+        <text style="color:#11a0e7;margin-left:0.4rem" id="recruitList">招募列表</text>
+        <text style="color:#d9d9d9;margin:0 0.15rem">|</text>
+        <text style="margin-right:0.75rem" id="recruitPer">招募人员</text>
+        <select name="" id="testSelect">
+            <!-- <option style="display:none;">赛事状态</option> -->
+            <option value="">进行中</option>
+            <option value="">已删除</option>
+            <option value="">已结束</option>
+        </select>
+        <input type="button" name="" value="查询" class="chazhao">
+
+        <div class="opera">
+            <button id="change">新增</button>
+            <button class="cancel">修改</button>
+            <button class="end">删除</button>
+        </div>
+        <div class="textModal">
+        </div>
+    </div>
+    <!-- 招募列表 -->
+    <div class="recruitmoment">
+        <div class="bottom">
+            <table id="detailTable" data-toggle="table"></table>
+        </div>
+    </div>
+</div>
+<!-- 删除招募信息 -->
+<div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="top:0.8rem">
+            <div class="modal-header">
+                <text style="color:#fff">提示</text>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <text style="color:#797979" id="warming"></text>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary con" id="surecancel">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--更新招募信息-->
+<div class="modal fade" id="updateEntityModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="updateEntityModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <text style="color:#fff" id="updateEntityModalLabel">修改</text>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="eventName" class="control-label">招募要求</label>
+                        <input type="text" class="form-control" id="eventName" name="eventName" placeholder="例：星际争霸赛" value="星际争霸赛">
+                    </div>
+                    <div class="form-group">
+                        <label for="level" class="control-label">招募等级</label>
+                        <input type="number" class="form-control" id="level" name="level" placeholder="例：4" value="4">
+                    </div>
+                    <div class="form-group">
+                        <label for="number" class="control-label">招募人数</label>
+                        <input type="text" class="form-control" id="number" name="number" placeholder="例：5人" value="4">
+                    </div>
+                    <div class="form-group">
+                        <label for="update_eventTime" class="control-label">上班时间</label>
+                        <input type="text" class="form-control" id="update_eventTime" name="update_eventTime" placeholder="例：（时间不限）" value="周六">
+                    </div>
+                    <div class="form-group">
+                        <label for="eventFlow" class="control-label">福利详情</label>
+                        <input type="text" class="form-control" placeholder="详情面议细谈" name="eventFlow">
+                        <!-- <textarea class="form-control" placeholder="详情面议细谈" name="eventFlow"></textarea> -->
+                    </div>
+                    <div class="form-group">
+                        <label for="sex" class="control-label">招募性别</label>
+                        <select id="sex" name="sex" class="form-control">
+                            <option value="">不限</option>
+                            <option value="">男生</option>
+                            <option value="">女生</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventFlow" class="control-label">当前状态</label>
+                        <select name="recuritStatus" id="status" class="form-control">
+                            <option value="1" id="doing">进行中</option>
+                            <option value="2" id="done">已结束</option>
+                            <option value="4">已删除</option>
+                        </select>
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="updateEvent">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+        <!-- 发布招募信息 -->
+<div class="modal fade" id="publishModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="publish">
+            <div class="form">
+                <div id="form">
+                    <div>
+                        <text id="pub" style="font-size:0.28rem;letter-spacing:0.02rem;">发布招募信息</text>
+                        <img src="../images/del.png" alt="" class="del">
+                    </div>
+                    <div>
+                        <label for="eventName" class="control-label">招募要求</label>
+                        <input type="text" class="form-control" id="eventName" name="eventName" placeholder="例：星际争霸赛">
+                    </div>
+                    <div>
+                        <label for="level" class="control-label">招募等级</label>
+                        <input type="number" class="form-control" id="level" name="level" placeholder="例：4">
+                    </div>
+                    <div>
+                        <label for="number" class="control-label">招募人数</label>
+                        <input type="text" class="form-control" id="number" name="number" placeholder="例：5人">
+                    </div>
+                    <div>
+                        <label for="update_eventTime" class="control-label">上班时间</label>
+                        <input type="text" class="form-control" id="update_eventTime" name="update_eventTime" placeholder="例：（时间不限）">
+                    </div>
+                    <div>
+                        <label for="sex" class="control-label">招募性别</label>
+                        <!-- <input type="text" class="form-control" id="sex" name="sex" placeholder="不限" value="男"> -->
+                        <select id="sex" name="sex" class="form-control">
+                            <option value="">不限</option>
+                            <option value="">男生</option>
+                            <option value="">女生</option>
+                        </select>
+                    </div>
+                    <div style="display:none"></div>
+                    <div>
+                        <label for="eventFlow" class="control-label">福利详情</label>
+                        <textarea class="form-control" placeholder="详情面议细谈" name="eventFlow"></textarea>
+                    </div>
+                    <button type="button" id="release">添加</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $.cookie("sessionId");
+        var itemInfo, data, eventStatus, id = '',
+            recuritStatusCode,
+            Data = '',
+            status = 0,
+            currentPage = 1;
+        recruitList();
+        //点击招募列表
+        $('#recruitList').click(function () {
+            recruitList();
+        })
+        // 点击招募员工
+        $('#recruitPer').click(function () {
+            $(".content").load("recruit.html");
+        })
+        //招募列表所有信息
+        function recruitList() {
+            currentPage = 1;
+
+            function recruitmentList() {
+                req = {
+                    currentPage: currentPage,
+                    status: recuritStatusCode
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: admin + "/admin/merchant/recruitmentList",
+                    data: req,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function (res) {
+                        data = JSON.parse(res);
+                        console.log(data)
+                        if (data.code == 200) {
+                            itemInfo = data;
+                            initOperHisTable();
+                            //分页
+                            $('#box').paging({
+                                initPageNo: itemInfo.data.paginationInfo.currentPage, // 初始页码
+                                totalPages: itemInfo.data.paginationInfo.totalPage, //总页数
+                                totalCount: '合计' + itemInfo.data.paginationInfo.totalRecord +
+                                    '条数据', // 条目总数
+                                jump: true, //是否支持跳转
+                                callback: function (page) { // 回调函数
+                                    currentPage = page;
+                                }
+                            })
+                        } else if (data.code == 202) {
+                            window.location.href = './login.html';
+                        } else {
+                            console.log('失败')
+                        }
+                    },
+                    error: function (xhr, textStatus) {
+                        alert("网络异常")
+                    }
+                })
+            }
+            recruitmentList();
+            // 跳转数据页码
+            $('.recruitmoment').on('click', '#jumpText', function () {
+                var $inp = $('#jumpText:text');
+                $inp.bind('keydown', function (e) {
+                    var key = e.which;
+                    if (key == 13) {
+                        if (currentPage == $inp.val() || $inp.val() > itemInfo.data.paginationInfo
+                            .totalPage) {
+                            e.preventDefault();
+                        } else {
+                            e.preventDefault();
+                            currentPage = $inp.val();
+                            recruitmentList();
+                        }
+                    }
+                });
+            })
+            $('.recruitmoment').on('click', '.jumpPage', function () {
+                currentPage = currentPage;
+                recruitmentList();
+            })
+
+            // // 发布招募令信息
+            $('.opera>#change').click(function () {
+                $('#publishModal').modal('show')
+                $('.publish').css('display', 'block')
+            })
+            // 取消发布
+            $('.del').click(function () {
+                $('.ResumeInformation').css('display', 'none')
+                $('.publish').css('display', 'none');
+                $('#publishModal').modal('hide')
+            })
+            $('#release').click(function () {
+                if ($("#sex option:selected").text() == '男生') {
+                    sex = 0
+                } else if ($("#sex option:selected").text() == '不限') {
+                    sex = -1
+                } else if ($("#sex option:selected").text() == '女生') {
+                    sex = 1
+                }
+
+                var req = {
+                    title: $('.form input[name=eventName]').val(),
+                    sex: sex,
+                    userNum: $('.form  input[name=number]').val(),
+                    level: $('.form  input[name=level]').val(),
+                    workTime: $('.form  input[name=update_eventTime]').val(),
+                    reward: $('.form  textarea[name=eventFlow]').val(),
+                }
+                $.ajax({
+                    type: "post",
+                    url: admin + '/admin/merchant/addRecruitment',
+                    data: req,
+                    contentType: "application/x-www-form-urlencoded",
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
+                    success: function (res) {
+                        var data = jQuery.parseJSON(res);
+                        console.log(data)
+                        if (data.code == 200) {
+                            $('#publishModal').modal('hide');
+                            $('.publish').css('display', 'none');
+                            recruitmentList();
+                        } else if (data.code = 202) {
+                            toastr.warning(data.desc);
+                            window.location.href = './login.html';
+                        } else {
+                            toastr.error(data.desc);
+                        }
+                    },
+                    error: function (data) {
+                        toastr.error("网络异常");
+                    }
+                });
+            })
+
+            $('.opera>.end').click(function () {
+                console.log(Data.title)
+                if (Data.title == undefined) {
+                    alert('请选择要删除的信息')
+                } else {
+                    $('#warming').text('你确定要删除“' + Data.title + '”这个招募信息吗？');
+                    $('#cancelModal').modal('show');
+                }
+
+            })
+            // 确定删除
+            $('#surecancel').click(function () {
+                var req = {
+                    id: id
+                }
+                console.log(req)
+                $.ajax({
+                    type: "post",
+                    url: admin + '/admin/merchant/deleteRecruitment',
+                    data: req,
+                    contentType: "application/x-www-form-urlencoded",
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
+                    success: function (res) {
+                        var data = jQuery.parseJSON(res);
+                        console.log(data)
+                        if (data.code == 200) {
+                            $('#cancelModal').modal('hide');
+                            recruitmentList();
+                        } else if (data.code = 202) {
+                            toastr.warning(data.desc);
+                            window.location.href = './login.html';
+                        } else {
+                            toastr.error(data.desc);
+                        }
+                    },
+                    error: function (data) {
+                        toastr.error("网络异常");
+                    }
+                });
+            })
+            //修改招募令
+            $('.opera>.cancel').click(function () {
+                if (id == '') {
+                    alert('请勾选要修改的信息')
+                } else {
+                    $('.modal-body input[name=eventName]').val(Data.title);
+                    $('.modal-body input[name=sex]').val(Data.sex);
+                    $('.modal-body input[name=number]').val(Data.userNum);
+                    $('.modal-body input[name=level]').val(Data.level);
+                    $('.modal-body input[name=update_eventTime]').val(Data.workTime);
+                    $('.modal-body input[name=eventFlow]').val(Data.reward);
+                    // $('.modal-body textarea[name=eventFlow]').val(Data.reward);
+                    $('#updateEntityModal').modal('show')
+                    if (Data.recuritStatusCode == 1) {
+                        $('.form-control').find('#doing').attr('selected', 'selected')
+                        $('.form-control').find('#done').removeAttr('selected')
+
+                    } else if (Data.recuritStatusCode == 2) {
+                        $('.form-control').find('#done').attr('selected', 'selected')
+                        $('.form-control').find('#doing').removeAttr('selected')
+                    }
+                }
+
+                return;
+            })
+            // 确认修改
+            $('#updateEvent').click(function () {
+                var sex, recruitStatus;
+                if ($("#sex option:selected").text() == '男生') {
+                    sex = 0
+                } else if ($("#sex option:selected").text() == '不限') {
+                    sex = -1
+                } else if ($("#sex option:selected").text() == '女生') {
+                    sex = 1
+                }
+                console.log($("#statys option:selected").text())
+                if ($("#status option:selected").text() == '进行中') {
+                    recruitStatus = 1
+                } else if ($("#status option:selected").text() == '已结束') {
+                    recruitStatus = 2
+                } else {
+                    recruitStatus = 0
+                }
+                var req = {
+                    id: Data.id,
+                    recruitStatus: recruitStatus,
+                    title: $('.modal-body input[name=eventName]').val(),
+                    sex: sex,
+                    userNum: $('.modal-body input[name=number]').val(),
+                    level: $('.modal-body input[name=level]').val(),
+                    workTime: $('.modal-body input[name=update_eventTime]').val(),
+                    reward: $('.modal-body input[name=eventFlow]').val()
+                }
+                $.ajax({
+                    url: admin + '/admin/merchant/updateRecruitment',
+                    data: req,
+                    method: 'post',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
+                    success: function (res) {
+                        var data = JSON.parse(res);
+                        console.log(data)
+                        if (data.code == 200) {
+                            recruitmentList();
+                            $('#updateEntityModal').modal('hide');
+                        } else if (data.code = 202) {
+                            // window.location.href = './login.html';
+                        } else {
+                            toastr.warning(data.desc);
+                        }
+                    },
+                    error: function (res) {
+                        console.log(res)
+                        alert("网络异常")
+                    }
+                });
+
+
+
+            })
+
+        }
+
+        function initOperHisTable() {
+            $('#detailTable').bootstrapTable('destroy').bootstrapTable({
+                // method: 'post',
+                contentType: "application/x-www-form-urlencoded",
+                data: itemInfo.data.list,
+                // url: admin+"/admin/merchant/eventList", //要请求数据的文件路径
+                dataField: "rows", //这是返回的json数组的key.默认好像是"rows".这里只有前后端约定好就行
+                pagination: true, //分页
+                sidePagination: "server", //服务端处理分页
+                paginationLoop: false,
+                showPaginationSwitch: true, //是否显示数据条数选择框
+                pageNumber: 1,
+                sortStable: true,
+                // strictSearch:true,
+                // showColumns:true,
+                pageSize: 10,
+                pageList: [10],
+
+                formatLoadingMessage: function () {
+                    return "请稍等，正在查询中...";
+                },
+
+                formatNoMatches: function () { //没有匹配的结果
+                    return '无符合条件的记录';
+                },
+                columns: [{
+                        field: 'id',
+                        title: '排序'
+                    },
+                    {
+                        field: 'title',
+                        title: '需求'
+                    },
+                    {
+                        field: 'sex',
+                        title: '性别'
+                    },
+                    {
+                        field: 'userNum',
+                        title: '人数'
+                    },
+                    {
+                        field: 'workTime',
+                        title: '上班时间'
+                    },
+
+                    {
+                        field: 'recuritStatus',
+                        title: '当前状态'
+                    },
+                    {
+                        field: 'createTime',
+                        title: '发布时间'
+                    },
+                    {
+                        field: 'reward2',
+                        title: '&nbsp&nbsp&nbsp&nbsp福 利 详 情&nbsp&nbsp&nbsp',
+                        events: {
+                            //查看字体信息
+                            'click #detail': function (e, value, row, index) {
+                                var topheight = ($(this).parent().parent().index()) * 0.9 +
+                                    "rem";
+                                console.log(topheight)
+                                $('.textModal').css({
+                                    'display': 'block',
+                                    'top': topheight
+                                }).html('<text>' + row.reward + '</text>');
+                                Data = row;
+                                return;
+                            },
+                        },
+                        formatter: function (value, row, index) {
+                            return '<span id="detail">' + row.reward + '</span>'
+                        }
+                    },
+                    {
+                        field: 'operate',
+                        title: '人员信息',
+                        align: 'center',
+                        events: {
+                            //选中
+                            'click #look': function (e, value, row, index) {
+                                if (row.recuritStatusCode == 4) {
+                                    alert('该信息已删除')
+                                    return '';
+                                }
+                                Data = row;
+                                $('#recruitId').html(Data.id)
+                                $(".content").load("recruit.html");
+                                return;
+                            },
+                        },
+                        formatter: function (value, row, index) {
+                            // <img src="../images/details.png" style="width:0.16rem;height:0.19rem;margin:-0.2rem 0.1rem;">
+                            return '<span style="font-size:0.2rem;color:#11a0e7;" id="look">查看详情</span>'
+                        }
+                    },
+                    {
+                        field: 'operat',
+                        title: '操作',
+                        align: 'center',
+                        events: {
+                            //选中
+                            'click #span': function (e, value, row, index) {
+                                Data = row;
+                                id = Data.id;
+                                if (row.recuritStatusCode == 4) {
+                                    return '';
+                                }
+                                $('.span').css({
+                                    'background': ''
+                                })
+                                $(this).find('.span').css({
+                                    'background': 'url("../images/select.png")',
+                                    'background-size': 'cover'
+                                })
+                                return;
+                            },
+                        },
+                        formatter: function (value, row, index) {
+                            return '<div id="span" style="height:0.9rem"><span class="span"></span></div>'
+                        }
+
+                    },
+
+
+
+                ]
+            });
+        }
+        $(".chazhao").click(function () {
+            var key = $('#testSelect option:selected').text();
+            if (key == '进行中') {
+                recuritStatusCode = 1;
+            } else if (key == '已删除') {
+                recuritStatusCode = 4;
+            } else {
+                recuritStatusCode = 2;
+            }
+            recruitList();
+        });
+        $('.textModal').click(function () {
+            $(this).css('display', 'none')
+        })
+    })
+</script>

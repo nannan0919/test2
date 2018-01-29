@@ -1,0 +1,255 @@
+.body {
+    .right {
+        .content {
+            .recruit,
+            .account,
+            .recruitList,
+            .banknote,{
+                .form-group {
+                    textarea {
+                        width: 70%;
+                        height: 1.6rem;
+                        outline: none;
+                        border: 0.01rem dashed #c4d1d6;
+                        margin-left: 1.45rem;
+                    }
+                }
+                #choose {
+                    .radio {
+                        input {
+                            display: block;
+                            position: absolute;
+                            top: -0.15rem;
+                            left: 0;
+                            width: 0.34rem;
+                            height: 0.34rem;
+                            outline: 0;
+                            border: 0.01rem solid #e3e3e3;
+                            border-radius: 50%;
+                            transition: border-color .3s;
+                            -webkit-transition: border-color .3s;
+                        }
+                    }
+                }
+                .choose {
+                    input {
+                        position: absolute;
+                        left: -9999px;
+                        border: 0.01rem solid #e3e3e3;
+                    }
+                }
+                #choose,
+                .choose {
+                    position: relative;
+                    .radio {
+                        position: relative;
+                        display: inline-block;
+                        font-weight: 400;
+                        color: #0c4757;
+                        padding-left: 0.5rem;
+                        cursor: pointer;
+                        i {
+                            display: block;
+                            position: absolute;
+                            top: -0.08rem;
+                            left: 0.4rem;
+                            width: 0.34rem;
+                            height: 0.34rem;
+                            outline: 0;
+                            border: 0.01rem solid #e3e3e3;
+                            border-radius: 50%;
+                            transition: border-color .3s;
+                            -webkit-transition: border-color .3s;
+                        }
+                        input:checked+i {
+                            border-color: #e3e3e3;
+                        }
+                        input+i:after {
+                            position: absolute;
+                            content: '';
+                            top: 0.07rem;
+                            left: 0.07rem;
+                            width: 0.18rem;
+                            height: 0.18rem;
+                            border-radius: 50%;
+                            background-color: rgb(9, 215, 96);
+                            opacity: 0;
+                            transition: opacity .1s;
+                            -webkit-transition: opacity .1s;
+                        }
+                        input:checked+i:after {
+                            opacity: 1;
+                        }
+                    }
+                }
+
+                .publish,
+                .ResumeInformation {
+                    height: 15rem;
+                    ;
+                    .form {
+                        #form {
+                            width: 8.5rem;
+                            height: 10rem;
+                            margin: 0.7rem auto;
+                            select {
+                                display: inline-block;
+                                height: 0.7rem;
+                            }
+                        }
+                    }
+                }
+                #top {
+                    height: 0.7rem;
+                    margin-top: 0.1rem;
+                    background-color: #fff;
+                    line-height: 0.7rem;
+                    margin-bottom: 0.2rem;
+                    #pull {
+                        float: right;
+                        height: 0.65rem;
+                        line-height: 0.65rem;
+                        width: 1.5rem;
+                        background: #11a0e7;
+                        color: #fff;
+                        margin-right: 0.2rem;
+                        font-size: 0.25rem;
+                        
+                    }
+                    text {
+                        font-size: 0.25rem;
+                        display: inline-block;
+                    }
+                }
+                .recruitPerson {
+                    .search {
+                        &>ul {
+                            &>li {
+                                float: left;
+                            }
+                        }
+                    }
+                    .list {
+                        margin-bottom: 0;
+                        li {
+                            height: 1.75rem;
+                            line-height: 1.75rem;
+                            background-color: #fff;
+                            border-bottom: 0.01rem solid#f8f6f6;
+                            #sel {
+                                margin: 0 0.3rem;
+                            }
+                            img {
+                                width: 1.2rem;
+                                height: 1.2rem;
+                                border-radius: 0.15rem;
+                            }
+                            ul {
+                                li {
+                                    float: left;
+                                    width: 1rem;
+                                    p {
+                                        height: 47%;
+                                        line-height: 1.04rem;
+                                        font-size: 0.25rem;
+                                        margin: 0;
+                                    }
+                                    &>text {
+                                        color: #11a0e7;
+                                        img {
+                                            width: 0.16rem;
+                                            height: 0.18rem;
+                                            margin-right: 0.1rem;
+                                        }
+                                    }
+                                    &>text:nth-of-type(2) {
+                                        color: #09d760;
+                                        img {
+                                            margin-left: 0.3rem;
+                                            margin-top: -0.05rem;
+                                            width: 0.19rem;
+                                            height: 0.19rem;
+                                        }
+                                    }
+                                }
+                                li:nth-last-of-type(-n+4) {
+                                    width: 4.2rem;
+                                }
+                                li:nth-last-of-type(1) {
+                                    float: right;
+                                    width: 2.5rem;
+                                    text-align: center;
+                                }
+                            }
+                        }
+                    }
+                    .Head {
+                        // height: 0.8rem;
+                        // line-height: 0.8rem;
+                        .chazhao {
+                            height: 0.55rem;
+                        }
+                        .operaList {
+                            width: 3.5rem;
+                            button {
+                                width: 1.5rem;
+                            }
+                        }
+                    }
+                }
+                .fixed-table-pagination {
+                    background-color: #fff;
+                    border-top: 0.01rem solid #f8f6f6;
+                }
+            }
+            .banknote {
+                .modal-body {
+                    &>div {
+                        height: 0.7rem;
+                        line-height: 0.7rem;
+                        margin-left: 0.9rem;
+                    }
+                }
+            }
+            .recruitList {
+                .table>tbody>tr>td,
+                .table>tbody>tr>th,
+                    {
+                    position: relative;
+                }
+                #detail {
+                    width: 3rem;
+                    height: 0.9rem;
+                    padding: 0rem 0.03rem;
+                    display: inline-block;
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    text-align: center;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                }
+                .textModal {
+                    width: 3.1rem;
+                    height: 2.1rem;
+                    position: absolute;
+                    display: none;
+                    z-index: 999;
+                    top: 414px;
+                    left: 604px;
+                    font-size: 0.2rem;
+                    background: url('../images/text.png');
+                    background-size: cover;
+                    text {
+                        height: 1.28rem;
+                        line-height: 0.4rem;
+                        overflow-y: auto;
+                        margin: 0.17rem;
+                        color: #fff;
+                    }
+                }
+            }
+        }
+    }
+}

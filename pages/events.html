@@ -1,0 +1,736 @@
+<div class="event">
+    <!--赛事内容-->
+    <!--搜索-->
+    <div class="search">
+        <div style="float:left;">
+            <ul id="selectBox">
+                <li style="font-size:0.25rem">筛选&nbsp;&nbsp;</li>
+                <li>
+                    <select name="" id="testSelect">
+                        <!-- <option style="display:none;">赛事状态</option> -->
+                        <option value="">已开始</option>
+                        <option value="">已结束</option>
+                        <option value="">已取消</option>
+                    </select>
+                </li>
+                <li>
+                    <input type="button" name="" value="查询" class="chazhao">
+                    <button id="button" style="border:0.01rem solid #11a0e7;">发布赛事</button>
+                </li>
+                <li></li>
+            </ul>
+        </div>
+        <div class="opera">
+            <button id="change">修改</button>
+            <button class="cancel">取消</button>
+            <button class="end">结束</button>
+        </div>
+    </div>
+    <div class="bottom">
+        <table id="detailTable" data-toggle="table"></table>
+    </div>
+    <!--发布赛事-->
+    <div class="modal fade" id="publishModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="updateEntityModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="publish">
+                <div class="form">
+                    <!-- <form> -->
+                    <div id="form">
+                        <div>
+                            <text style="font-size:0.28rem;letter-spacing:0.02rem;">发布赛事</text>
+                            <img src="../images/del.png" alt="" id="del">
+                        </div>
+                        <div>
+                            <label for="eventName" class="control-label">赛事名称</label>
+                            <input type="text" class="form-control" id="eventName" name="eventName" placeholder="例：城市赛区">
+                        </div>
+                        <div>
+                            <label for="eventTime" class="control-label">开始时间</label>
+                            <input type="text" class="form-control datetime-picker" id="eventTime" placeholder="格式：2017-10-10 14:00:00" name="eventBeginTime"
+                                readonly>
+                        </div>
+                        <div>
+                            <label for="enrollCloseTime" class="control-label">截止时间</label>
+                            <input type="text" class="form-control datetime-picker" id="enrollCloseTime" placeholder="格式：2017-10-10 16:00:00" name="enrollColseTime"
+                                readonly>
+                        </div>
+                        <div>
+                            <label for="minPlayers" class="control-label">赛事详情</label>
+                            <input type="number" id="minPlayers" name="minPlayers" placeholder="最低人数" style="width:1.57rem">
+                            <input type="number" id="price" name="price" placeholder="报名费用" style="width:1.57rem">
+                            <input type="number" id="basePot" name="basePot" placeholder="奖池金额" style="width:1.57rem">
+                        </div>
+                        <div>
+                            <label for="enentType" class="control-label">赛事类型</label>
+                            <i>
+                                <span style="position: relative">
+                                    <span class="selectType">
+                                        <text class="per">个人赛事</text>
+                                        <text class="selected"></text>
+                                        <img src="../images/select.png" alt="" style="position: absolute;left:1.18rem;top:0.02rem;display: none" class="img1">
+                                    </span>
+
+
+                                </span>
+                                <span style="position: relative">
+                                    <span class="select1Type">
+                                        <text class="group">团体赛事</text>
+                                        <text class="selected1"></text>
+                                        <img src="../images/select.png" alt="" style="position: absolute;left:1.18rem;top:0.02rem;display: none" class="img2">
+                                    </span>
+
+                                </span>
+                            </i>
+
+                        </div>
+                        <div>
+                            <label for="eventFlow" class="control-label">赛事详情</label>
+                            <textarea class="form-control" placeholder="填写赛事详情" name="eventFlow"></textarea>
+                        </div>
+                        <div>
+                            <label for="rewardInfo" class="control-label">奖励详情</label>
+                            <textarea class="form-control" placeholder="填写奖励详情" name="rewardInfo"></textarea>
+                        </div>
+                        <button type="button" id="release">发布</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--更新赛事基本情况-->
+    <div class="modal fade" id="updateEntityModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="updateEntityModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <text style="color:#fff" id="updateEntityModalLabel">更新赛事类型</text>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="eventName" class="control-label">赛事id</label>
+                            <input type="text" class="form-control" name="id" disabled="disabled">
+                        </div>
+                        <div class="form-group">
+                            <label for="update_enrollCloseTime" class="control-label">报名费</label>
+                            <input type="number" class="form-control" id="update_eventPrice" name="price" placeholder="最低20">
+                        </div>
+                        <div class="form-group">
+                            <label for="basePot" class="control-label">奖池金额</label>
+                            <input type="number" class="form-control" name="basePot" id="basePot">
+                        </div>
+                        <div class="form-group">
+                            <label for="eventName" class="control-label">赛事名称</label>
+                            <input type="text" class="form-control" name="name" placeholder="城市赛区">
+                        </div>
+                        <div class="form-group" style="display: none">
+                            <label for="update_eventTypeSelection" class="control-label">赛事类型</label>
+                            <input type="text" class="form-control" id="update_eventTypeSelection" name="eventType">
+                        </div>
+                        <div class="form-group">
+                            <label for="update_eventTime" class="control-label">开始时间</label>
+                            <input type="text" class="form-control datetime-picker" id="update_eventTime" name="eventTime" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="update_enrollCloseTime" class="control-label">截止时间</label>
+                            <input type="text " class="form-control datetime-picker" id="update_enrollCloseTime" name="enrollCloseTime" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="update_rewardTypeSelection" class="control-label">奖励详情</label>
+                            <input type="text" class="form-control" name="rewardInfo" id="update_rewardTypeSelection">
+                        </div>
+                        <div class="form-group">
+                            <label for="update_rewardTypeSelection" class="control-label">赛事流程</label>
+                            <input type="text" class="form-control" name="eventFlow">
+                        </div>
+
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="updateEvent">保存更新</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 删除赛事 -->
+    <div class="modal fade" id="cancelEventModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="top:0.8rem">
+                <div class="modal-header">
+                    <text style="color:#fff">提示</text>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <text style="color:#797979" id="promptInformation"></text>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary con" id="surecancel">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--结束赛事-->
+    <div class="modal fade" id="finishOneEventModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="finishOneEventModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <text style="color:#fff">结束赛事</text>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                        <!-- <div class="form">
+                            <div id="form">
+                                <div style="margin-bottom:0.15rem;">
+                                    <label for="eventName" class="control-label">赛事名称</label>
+                                    <input type="text" class="form-control" id="eventName" name="eventName" placeholder="例：城市赛区">
+                                </div>
+                                <div style="margin-bottom:0.15rem;">
+                                    <label for="eventName" class="control-label">赛事名称</label>
+                                    <input type="text" class="form-control" id="eventName" name="eventName" placeholder="例：城市赛区">
+                                </div>
+                                <div>
+                                    <label for="eventFlow" class="control-label" style="margin-top: 0.2rem;
+                                    height: 1.6rem;">赛事详情</label>
+                                    <textarea class="form-control" placeholder="填写赛事详情" name="eventFlow"></textarea>
+                                </div>
+                            </div>
+                        </div> -->
+                    <input id="finishOne_eventId" style="display:none" />
+                    <table class="table  table-bordered" id="finishOneEventTable">
+                        <thead>
+                            <th style="border:0.01rem dashed #ddd">用户会员卡号</th>
+                            <th style="border:0.01rem dashed #ddd">排名编号</th>
+                            <th style="border:0.01rem dashed #ddd">奖励信息</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td onclick="tdclick(this)" style="border:0.01rem dashed #ddd"></td>
+                                <td onclick="tdclick(this)" style="border:0.01rem dashed #ddd"></td>
+                                <td onclick="tdclick(this)"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="save">保存</button>
+                    <button type="button" class="btn btn-primary" id="Finnish">结束赛事</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--结束赛事结果-->
+    <div class="modal fade" id="finishEventModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="finishEventModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <text style="color:#fff" id="finishEventModalLabel">结束赛事</text>
+                    <button type="button" class="close" id="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input id="finish_eventId" style="display:none" />
+                    <p>1. 您确定要结束当前赛事，结束赛事时，系统会自动按照发布赛事时指定的奖励信息和用户最好成绩归类。</p>
+                    <p>2. 结束赛事后，可以在小程序中赛事结果中看到结果</p>
+                    <p>3. 当您确认点击赛事结束后，并不会向用户的支付账户中直接发起退款。</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="sureover">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--如果登录过期提示-->
+    <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="width:3rem;height:2rem;left:50%;transform:translateX(-50%);top:2.5rem;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary con" id="sure" style="position:absolute;bottom:0.25rem;left:75%;">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--</div>-->
+</div>
+
+
+<script>
+    // 输入框聚焦边框变色
+    $("input").focus(function () {
+        $("input").css("border-color", "#c4d1d6");
+        $(this).css("border-color", "#11a0e7");
+    });
+    // 选择赛事类型
+    var eventType, itemInfo, Data = ''; //赛事类型状态   数据
+    $('.selectType').click(function () {
+        $('.img1').css('display', 'block');
+        $('.img2').css('display', 'none');
+        eventType = 1
+    })
+    $('.select1Type').click(function () {
+        $('.img2').css('display', 'block');
+        $('.img1').css('display', 'none');
+        eventType = 4
+    })
+    /*单行可编辑*/
+    function tdclick(tdobject) {
+        var td = $(tdobject);
+        td.attr("contentEditable", "true");
+    }
+    //赛事发布的时间
+    $(document).ready(function () {
+        $.cookie("sessionId");
+        $('.datetime-picker').datetimepicker({
+            format: 'yyyy-mm-dd hh:ii:00',
+            language: 'zh-CN',
+            autoclose: true,
+            todayHighlight: true,
+            todayBtn: true,
+            keyboardNavigation: true
+        });
+        toastr.options = {
+            "timeOut": "2000",
+            "showDuration": "200",
+            "hideDuration": "300"
+        }
+        var itemInfo, data, eventStatus, currentPage = 1;
+
+        function ListData() {
+            req = {
+                eventStatus: eventStatus,
+                currentPage: currentPage
+            };
+            $.ajax({
+                type: 'POST',
+                url: admin + "/admin/merchant/eventList",
+                data: req,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (res) {
+                    data = JSON.parse(res);
+                    console.log(data)
+                    if (data.code == 200) {
+                        itemInfo = data;
+                        initOperHisTable();
+                        //分页
+                        $('#box').paging({
+                            initPageNo: itemInfo.data.paginationInfo.currentPage, // 初始页码
+                            totalPages: itemInfo.data.paginationInfo.totalPage, //总页数
+                            // totalPages:10, ///总页数
+                            totalCount: '合计' + itemInfo.data.paginationInfo.totalRecord +
+                                '条数据', // 条目总数
+                            // slideSpeed: 600, // 缓动速度。单位毫秒
+                            jump: true, //是否支持跳转
+                            callback: function (page) { // 回调函数
+                                currentPage = page;
+                            }
+                        })
+                    } else if (data.code == 202) {
+                        window.location.href = './login.html';
+                    } else {
+                        console.log('失败')
+                    }
+                },
+                error: function (xhr, textStatus) {
+                    alert("网络异常")
+                }
+            })
+        }
+        ListData();
+
+        // 跳转数据页码
+        $('.event').on('click', '#jumpText', function () {
+            var $inp = $('#jumpText:text');
+            $inp.bind('keydown', function (e) {
+                var key = e.which;
+                if (key == 13) {
+                    if (currentPage == $inp.val() || $inp.val() > itemInfo.data.paginationInfo.totalPage) {
+                        e.preventDefault();
+                    } else {
+                        e.preventDefault();
+                        currentPage = $inp.val();
+                        ListData();
+                    }
+                }
+            });
+        })
+        $('.event').on('click', '.jumpPage', function () {
+            currentPage = currentPage;
+            ListData();
+        })
+
+        //查找
+        $(".chazhao").click(function () {
+            var key = $('#testSelect option:selected').text();
+            if (key == '已开始') {
+                eventStatus = 0;
+            } else if (key == '已取消') {
+                eventStatus = 3;
+            } else {
+                eventStatus = 2;
+            }
+            ListData();
+        });
+
+        function initOperHisTable() {
+            $('#detailTable').bootstrapTable('destroy').bootstrapTable({
+                // method: 'post',
+                contentType: "application/x-www-form-urlencoded",
+                data: itemInfo.data.list,
+                // url: admin+"/admin/merchant/eventList", //要请求数据的文件路径
+                dataField: "rows", //这是返回的json数组的key.默认好像是"rows".这里只有前后端约定好就行
+                pagination: true, //分页
+                sidePagination: "server", //服务端处理分页
+                paginationLoop: false,
+                showPaginationSwitch: false, //是否显示数据条数选择框
+                pageNumber: 1,
+                pageSize: 10,
+                pageList: [10],
+
+                formatLoadingMessage: function () {
+                    return "请稍等，正在查询中...";
+                },
+
+                formatNoMatches: function () { //没有匹配的结果
+                    return '无符合条件的记录';
+                },
+                columns: [{
+                        field: 'id',
+                        title: '赛事id'
+                    },
+                    {
+                        field: 'name',
+                        title: '赛事名称'
+                    },
+                    {
+                        field: 'price',
+                        title: '报名费'
+                    },
+                    {
+                        field: 'basePot',
+                        title: '奖池金额'
+                    },
+                    {
+                        field: 'eventStatus',
+                        title: '赛事状态'
+                    },
+                    {
+                        field: 'enrollCloseTime',
+                        title: '截止时间'
+                    },
+                    {
+                        field: 'operate',
+                        title: '操作',
+                        align: 'center',
+                        events: {
+                            //选中
+                            'click #span': function (e, value, row, index) {
+                                if (row.eventStatusCode == 3 || row.eventStatusCode == 2) {
+                                    return '';
+                                }
+                                Data = row;
+                                $('.span').css({
+                                    'background': ''
+                                })
+                                $(this).find('.span').css({
+                                    'background': 'url("../images/select.png")',
+                                    'background-size': 'cover'
+                                })
+                                return;
+                            },
+                        },
+                        formatter: function (value, row, index) {
+                            return '<div id="span" style="height:0.9rem"><span class="span"></span></div>'
+                        }
+                    },
+                ]
+            });
+        }
+
+        // 发布赛事
+        $('#button').click(function () {
+            $('#publishModal').modal('show');
+            $('.publish').css('display', 'block')
+        })
+        // 取消发布赛事
+        $('#del').click(function () {
+            $('#publishModal').modal('hide');
+            $('.publish').css('display', 'none')
+
+        })
+        $('#release').click(function () {
+            var req = {
+                eventName: $('.form input[name=eventName]').val(),
+                eventBeginTime: $('.form input[name=eventBeginTime]').val(),
+                enrollColseTime: $('.form  input[name=enrollColseTime]').val(),
+                price: $('.form  input[name=price]').val(),
+                eventType: eventType,
+                basePot: $('.form  input[name=basePot]').val(),
+                rewardInfo: $('.form  textarea[name=rewardInfo]').val(),
+                eventFlow: $('.form  textarea[name=eventFlow]').val(),
+                minPlayers: $('.form input[name=minPlayers]').val(),
+            }
+            $.ajax({
+                type: "post",
+                url: admin + '/admin/publishEvent',
+                data: req,
+                contentType: "application/x-www-form-urlencoded",
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                success: function (res) {
+                    var data = jQuery.parseJSON(res);
+                    if (data.code == 200) {
+                        $('#publishModal').modal('hide')
+                        $('.publish').css('display', 'none')
+
+                        ListData();
+                    } else if (data.code = 202) {
+                        toastr.warning(data.desc);
+                        window.location.href = './login.html';
+                    } else {
+                        toastr.error(data.desc);
+                    }
+                },
+                error: function (data) {
+                    toastr.error("网络异常");
+                }
+            });
+        })
+        //修改赛事
+        $('#change').click(function () {
+            if (Data.id == undefined) {
+                alert('请勾选要修改的赛事')
+            } else {
+                $('.modal-body input[name=id]').val(Data.id); //eventId
+                $('.modal-body input[name=name]').val(Data.name);
+                $('.modal-body input[name=basePot]').val(Data.basePot); //basePot
+                $('.modal-body input[name=rewardInfo]').val(Data.rewardInfo); //rewardInfo
+                $('.modal-body input[name=eventType]').val(Data.eventStatusCode);
+                $('.modal-body input[name=eventTime]').val(Data.eventTime);
+                $('.modal-body input[name=enrollCloseTime]').val(Data.enrollCloseTime);
+                $('.modal-body input[name=eventFlow]').val(Data.eventFlow);
+                $('.modal-body input[name=price]').val(Data.price);
+                $('#updateEntityModal').modal('show');
+            }
+
+            return;
+
+        })
+        // 确认修改
+        $('#updateEvent').click(function () {
+            var req = {
+                eventId: $('.modal-body input[name=id]').val(),
+                eventName: $('.modal-body input[name=name]').val(),
+                eventBeginTime: $('.modal-body input[name=eventTime]').val(),
+                enrollCloseTime: $('.modal-body  input[name=enrollCloseTime]').val(),
+                price: $('.modal-body  input[name=price]').val(),
+                eventType: $('.modal-body  input[name=eventType]').val(),
+                basePot: $('.modal-body input[name=basePot]').val(),
+                rewardInfo: $('.modal-body  input[name=rewardInfo]').val(),
+                eventFlow: $('.modal-body input[name=eventFlow]').val(),
+            }
+            $.ajax({
+                url: admin + '/admin/merchant/updateEvent',
+                data: req,
+                method: 'post',
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                success: function (res) {
+                    var data = JSON.parse(res);
+                    if (data.code == 200) {
+                        ListData();
+                        $('#updateEntityModal').modal('hide');
+                    } else if (data.code = 202) {
+                        // window.location.href = './login.html';
+                    } else {
+                        toastr.warning(data.desc);
+                    }
+                },
+                error: function (xhr, textStatus) {
+                    alert("网络异常")
+                }
+            });
+        })
+        //取消赛事
+        $('.cancel').click(function () {
+            if (Data.id == undefined) {
+                alert('请勾选要取消的赛事')
+            } else {
+                $('#promptInformation').text('你确定要取消赛事Id为“' + Data.id + '”的赛事吗?')
+                $('#cancelEventModal').modal('show');
+                $('#surecancel').click(function () {
+                    var req = {
+                        eventId: Data.id
+                    }
+                    $.ajax({
+                        type: 'POST',
+                        url: admin + '/admin/merchant/cancelEvent',
+                        data: req,
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        success: function (res) {
+                            var data = JSON.parse(res);
+                            if (data.code == 200) {
+                                ListData();
+                                $('#cancelEventModal').modal('hide');
+                            } else if (data.code = 202) {
+                                window.location.href = './login.html';
+                            } else {
+                                toastr.warning(data.desc);
+                            }
+                        },
+                        error: function (xhr, textStatus) {
+                            alert("网络异常")
+                        }
+                    })
+                })
+            }
+
+        })
+        // 结束赛事
+        $('.end').click(function () {
+            if (Data.id == undefined) {
+                alert('请勾选要结束的赛事')
+            } else {
+                $('#finishOneEventModal').modal('show');
+
+            }
+            // 结束赛事按钮
+        })
+        $('#Finnish').click(function () {
+            $('#finishEventModal').modal('show');
+            $('#finishOneEventModal').modal('hide');
+        })
+        $('#close').click(function () {
+            $('#finishOneEventModal').modal('show');
+        })
+
+        // 结束赛事保存用户信息
+        $('#save').click(function () {
+            var rank = '';
+            var cardNo = '';
+            var rewardInfo = '';
+            var tbody = $('#finishOneEventTable tbody')[0];
+            var rows = tbody.rows;
+
+            for (var i = 0; i < rows.length; i++) {
+                var cells = rows[i].cells;
+                var data = [];
+                cardNo = cells[0].innerText;
+                rank = cells[1].innerText;
+                rewardInfo = cells[2].innerText;
+            }
+
+            rank = parseFloat(rank)
+
+            var req = {
+                eventId: Data.id,
+                rank: rank,
+                cardNo: cardNo,
+                type: "0",
+                rewardInfo: rewardInfo
+            }
+
+            $.ajax({
+                url: admin + "/admin/merchant/finishEvent",
+                data: req,
+                contentType: "application/x-www-form-urlencoded",
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                type: "post",
+                success: function (res) {
+                    var data = JSON.parse(res);
+                    console.log(data)
+                    if (data.code == 200) {
+                        alert(1)
+                        toastr.success("保存成功");
+                        $("#finishOneEventModal").modal('hide');
+                        ListData();
+                    } else if (data.code == 202) {
+                        window.location.href = './login.html';
+                    } else {
+                        toastr.error(data.desc, '结束赛事');
+                    }
+                },
+                error: function (res) {
+                    toastr.warning(res, '结束赛事时异常');
+                }
+            });
+        })
+        // 确定正常结束赛事
+        $('#sureover').click(function () {
+            var rank = '';
+            var cardNo = '';
+            var rewardInfo = '';
+            var tbody = $('#finishOneEventTable tbody')[0];
+            var rows = tbody.rows;
+
+            for (var i = 0; i < rows.length; i++) {
+                var cells = rows[i].cells;
+                var data = [];
+                cardNo = cells[0].innerText;
+                rank = cells[1].innerText;
+                rewardInfo = cells[2].innerText;
+            }
+            rank = parseFloat(rank)
+            var req = {
+                eventId: Data.id,
+                rank: rank,
+                cardNo: cardNo,
+                type: "1",
+                rewardInfo: rewardInfo
+            }
+            $.ajax({
+                url: admin + "/admin/merchant/finishEvent",
+                data: req,
+                contentType: "application/x-www-form-urlencoded",
+                type: "post",
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                success: function (res) {
+                    var data = JSON.parse(res);
+                    if (data.code == 200) {
+                        $("#finishOneEventModal").modal('hide');
+                        $("#finishEventModal").modal('hide');
+                        toastr.success(data.desc, '结束赛事');
+                        ListData();
+                    } else if (data.code == 202) {
+                        window.location.href = './login.html';
+                    } else {
+                        toastr.error(data.desc, '结束赛事');
+                    }
+                },
+                error: function (res) {
+                    toastr.warning(res, '结束赛事时异常');
+                }
+            });
+
+        });
+    })
+</script>

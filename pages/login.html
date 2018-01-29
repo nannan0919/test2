@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商家管理系统</title>
+    <link href="../css/login.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <style>
+        body {
+            background: url('../images/login.jpg');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+
+        .animated {
+            position: relative;
+            background-color: red;
+        }
+
+        .login {
+            width: 7.6rem;
+            height: 4.7rem;
+            background: url('../images/login.png');
+            padding: 0.3rem 0.4rem 0.4rem 0.4rem;
+            background-size: cover;
+            position: absolute;
+            top: 1.6rem;
+            right: 1.8rem;
+        }
+
+        #username,
+        #password {
+            outline: none;
+            border: 0px;
+            width: 5rem;
+            height: 0.74rem;
+            margin: 0.1rem 0rem 0.2rem 0rem;
+            position: absolute;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            padding-left: 0.1rem;
+        }
+
+        #password {
+            margin-bottom: 0px;
+            top: 2.3rem;
+        }
+
+        .btn {
+            width: 2rem;
+            height: 0.7rem;
+            padding: 0.12rem 0.24rem;
+            background-color: #7ecef4;
+            color: #fff;
+            outline: none;
+            border: 0px;
+            position: absolute;
+            bottom: 1.08rem;
+            left: 50%;
+            transform: translateX(-50%)
+        }
+
+        .copyright {
+            position: absolute;
+            top: 7rem;
+            right: 2rem;
+            color: #7ecef4;
+        }
+    </style>
+</head>
+
+<body class="gray-bg">
+    <div class="animated fadeInDown">
+        <div class="login">
+            <form>
+                <div>
+                    <input type="text" placeholder="用户名" required="" id="username">
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="密码" required="" id="password">
+                </div>
+                <button type="button" onclick="login()" class="btn">登录</button>
+
+            </form>
+        </div>
+
+        <div class="copyright">
+            <strong>版权所有：</strong> 西安斯普瑞特信息科技有限公司
+        </div>
+
+    </div>
+</body>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/game-js/rem.js"></script>
+<script src="../js/base.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<script src="../js/toastr.min.js"></script>
+<script>
+    function login() {
+        var username = $("#username").val();
+        var password = $("#password").val();
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        $.cookie("sessionId");
+        $.ajax({
+            type: "POST",
+            url: admin + "/admin/merchantLogin",
+            data: {
+                username: username,
+                password: password
+            },
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
+            success: function (res) {
+                var data = JSON.parse(res);
+                console.log(data)
+                if (data.code == 200) {
+                    localStorage.merchantId = data.data.merchantId;
+                    window.location.href = './AllPage.html';
+                } else {
+                    console.log(data)
+                    toastr.warning(data.desc);
+                }
+            },
+            error: function (res) {
+                alert(res);
+            }
+        });
+    }
+</script>
+
+</html>

@@ -1,0 +1,168 @@
+<div class="myGame">
+    <!--搜索-->
+    <div class="search">
+        <input type="text" name="" placeholder="创建人" id="member">
+        <input name="" class="form-control datetime-picker" placeholder="开始时间" id="beginTime" style="width:3.5rem" readonly>
+        <input name="" class="form-control datetime-picker" placeholder="结束时间" id="endTime" style="width:3.5rem" readonly>
+        <input type="button" name="" value="查询" class="chazhao">
+        <input type="button" name="" value="导出" class="daochu">
+
+    </div>
+    <div class="bottom">
+        <table id="detailTable" data-toggle="table"></table>
+    </div>
+    <!--如果登录过期提示-->
+    <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="width:3rem;height:2rem;left:50%;transform:translateX(-50%);top:2.5rem;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary con" id="sure" style="position:absolute;bottom:0.25rem;left:75%;">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $.cookie("sessionId");
+        $('.datetime-picker').datetimepicker({
+            format: 'yyyy-mm-dd hh:ii:00',
+            language: 'zh-CN',
+            autoclose: true,
+            todayHighlight: true,
+            todayBtn: true,
+            keyboardNavigation: true
+        });
+        // 输入框聚焦边框变色
+        $("input").focus(function () {
+            $("input").css("border-color", "#c4d1d6");
+            $(this).css("border-color", "#11a0e7");
+        });
+        var itemInfo, data, userName, beginTime, currentPage = 1;
+
+        function roomListData() {
+            req = {
+                userName: userName,
+                beginTime: beginTime,
+                currentPage: currentPage
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: admin + "/admin/merchant/roomList",
+                data: req,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (res) {
+                    data = JSON.parse(res);
+                    if (data.code == 200) {
+                        itemInfo = data;
+                        initOperHisTable();
+                        //分页
+                        $('#box').paging({
+                            initPageNo: itemInfo.data.paginationInfo.currentPage, // 初始页码
+                            totalPages: itemInfo.data.paginationInfo.totalPage, //总页数
+                            totalCount: '合计' + itemInfo.data.paginationInfo.totalRecord +
+                                '条数据', // 条目总数
+                            jump: true, //是否支持跳转
+                            callback: function (page) { // 回调函数
+                                currentPage = page;
+                            }
+                        })
+                    } else if (data.code == 202) {
+                        window.location.href = './login.html';
+                    } else {
+                        console.log('失败')
+                    }
+                },
+                error: function (xhr, textStatus) {
+                    alert("网络异常")
+                }
+            })
+        }
+        roomListData();
+
+        // 跳转数据页码
+        $('.myGame').on('click', '#jumpText', function () {
+            var $inp = $('#jumpText:text');
+            $inp.bind('keydown', function (e) {
+                var key = e.which;
+                if (key == 13) {
+                    if (currentPage == $inp.val() || $inp.val() > itemInfo.data.paginationInfo.totalPage) {
+                        e.preventDefault();
+                    } else {
+                        e.preventDefault();
+                        currentPage = $inp.val();
+                        roomListData()
+                    }
+                }
+            });
+        })
+        $('.myGame').on('click', '.jumpPage', function () {
+            currentPage = currentPage;
+            roomListData();
+        })
+
+        function initOperHisTable() {
+            $('#detailTable').bootstrapTable('destroy').bootstrapTable({
+                // url: admin+"/admin/merchant/roomList",
+                data: itemInfo.data.list,
+                method: 'post',
+                contentType: "application/x-www-form-urlencoded",
+                dataField: "rows", //这是返回的json数组的key.默认好像是"rows".这里只有前后端约定好就行
+                pagination: true, //分页
+                sidePagination: "server", //服务端处理分页
+                paginationLoop: false,
+                showPaginationSwitch: false, //是否显示数据条数选择框
+                pageNumber: 1,
+                pageSize: 10,
+                pageList: [10],
+                showExport: true,
+                formatLoadingMessage: function () {
+                    return "请稍等，正在查询中...";
+                },
+
+                formatNoMatches: function () { //没有匹配的结果
+                    return '无符合条件的记录';
+                },
+                columns: [{
+                        field: 'userName',
+                        title: '创建人'
+                    },
+                    {
+                        field: 'playerNum',
+                        title: '玩家数量'
+                    },
+                    {
+                        field: 'useTime',
+                        title: '游戏耗时'
+                    },
+                    {
+                        field: 'roomStatusDesc',
+                        title: '游戏状态'
+                    },
+                    {
+                        field: 'time',
+                        title: '创建时间'
+                    },
+                ]
+            });
+        }
+        //查找
+        $('.chazhao').click(function () {
+            var key = $("#member").val();
+            var key1 = $("#beginTime").val();
+            userName = key;
+            beginTime = key1;
+            roomListData();
+        })
+    });
+</script>

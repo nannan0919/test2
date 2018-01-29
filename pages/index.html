@@ -1,0 +1,230 @@
+	<div class="kinds">
+		<span style="background:#64c0b4">
+			<i>
+				<text id="totalSaleAmount"></text>
+				<text>总销量</text>
+			</i>
+			<img src="../images/sales.png" alt="" style="width:0.66rem;height:0.71rem">
+		</span>
+		<span style="background:#a8dbc4">
+			<i>
+				<text id="payedOrdersNum"></text>
+				<text>总订单</text>
+			</i>
+			<img src="../images/order.png" alt="" style="width:0.57rem;height:0.71rem">
+		</span>
+		<span style="background:#fcc670">
+			<i>
+				<text id="eventNum"></text>
+				<text>赛事总数</text>
+			</i>
+			<img src="../images/Perer.png" alt="" style="width:0.81rem;height:0.75rem">
+		</span>
+		<span style="background:#fc6781;margin-right:0rem;">
+			<i>
+				<text id="eventPotAmount"></text>
+				<text>奖池金额</text>
+			</i>
+			<img src="../images/count.png" alt="" style="width:0.7rem;height:0.7rem">
+		</span>
+	</div>
+	<div class="middle">
+		<div class="left">
+			<div class="tops">商家信息</div>
+			<h4 id="merchantName"></h4>
+			<h5>
+				<text>营业时间：</text>
+				<text id="saleTime"></text>
+			</h5>
+			<h5>
+				<text>联系电话：</text>
+				<text id="phone"></text>
+			</h5>
+			<h5>
+				<text>商家住址：</text>
+				<text id="location"></text>
+			</h5>
+		</div>
+		<div class="right">
+			<div class="tops">今日成交量</div>
+			<div id="main" style="width:3.9rem;height:3.9rem"></div>
+			<div class="main">
+				<div>
+					<text></text>
+					<text>赛事报名：</text>
+					<text style="color:#11a0e7" id="dailyEventIncomeAmount"></text>
+					<text>元</text>
+				</div>
+				<div>
+					<text></text>
+					<text>购买商品：</text>
+					<text style="color:#11a0e7" id="dailyGroupBuyIncomeAmount"></text>
+					<text>元</text>
+	
+				</div>
+			</div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="trends">
+		<div class="title">
+			<h5>销量统计图</h5>
+			<span>
+				<img src="../images/circle1.png" alt="">
+				<text>上个月</text>
+				<img src="../images/circle2.png" alt="">
+				<text>本月</text>
+			</span>
+	
+		</div>
+		<div id="trands" style="min-width:400px;height:6rem;">
+	
+		</div>
+	</div>
+
+
+<script>
+	$(function () {
+		$.cookie("sessionId");
+		$.ajax({
+			type: 'POST',
+			url: admin + "/admin/merchant/getOverViewInfo",
+			data: '',
+			xhrFields: {
+				withCredentials: true
+			},
+			success: function (res) {
+				data = JSON.parse(res);
+				console.log(data)
+				if (data.code == 200) {
+					$('#useName').text(data.data.username)
+					$('#dailyEventIncomeAmount').text(data.data.dailyEventIncomeAmount)
+					$('#dailyGroupBuyIncomeAmount').text(data.data.dailyGroupBuyIncomeAmount)
+					$('#merchantName').text(data.data.merchantName)
+					$('#location').text(data.data.location)
+					$('#saleTime').text(data.data.saleTime)
+					$('#phone').text(data.data.phone)
+					$('#totalSaleAmount').text(data.data.totalSaleAmount)
+					$('#payedOrdersNum').text(data.data.payedOrdersNum)
+					$('#totalSaleAmount').text(data.data.totalSaleAmount)
+					$('#eventNum').text(data.data.eventNum)
+					$('#eventPotAmount').text(data.data.eventPotAmount)
+					// 饼形图
+					var myCharts = echarts.init(document.getElementById('main'));
+					option = {
+						calculable: true,
+						series: [{
+							type: 'pie',
+							center: ['50%', '50%'],
+							radius: '80%',
+							itemStyle: {
+								normal: {
+									label: {
+										position: 'inner',
+										formatter: function (params) {
+											return (params.percent - 0).toFixed(0) + '%'
+										},
+										textStyle: {
+											fontSize: 18,
+										}
+									},
+									labelLine: {
+										show: false
+									}
+								},
+							},
+							data: [{
+									value: data.data.dailyEventIncomeAmount,
+									name: '赛事报名'
+								},
+								{
+									value: data.data.dailyGroupBuyIncomeAmount,
+									
+									name: '购买商品'
+								},
+							]
+						}, ],
+						color: ['#ed7d31', '#ffc000']
+					};
+					myCharts.setOption(option);
+
+					//折线图
+					var myChart = echarts.init(document.getElementById('trands'));
+					options = {
+						color: ['#83caef', '#03f999'],
+						tooltip: {
+							trigger: 'axis',
+							axisPointer: { // 坐标轴指示器，坐标轴触发有效
+								type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+							}
+						},
+						grid: {
+							left: '3%',
+							right: '4%',
+							bottom: '3%',
+							containLabel: true
+						},
+						xAxis: [{
+							type: 'category',
+							data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18',
+								'19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'
+							],
+							axisTick: {
+								alignWithLabel: true
+							}
+						}],
+						yAxis: [{
+							splitLine: {
+								show: false
+							}, //没有表格
+							type: 'value',
+						}],
+						series: [{
+								name: '上个月',
+								type: 'line',
+								smooth: true,
+								itemStyle: {
+									normal: {
+										areaStyle: {
+											type: 'default',
+											zIndex: 0.5
+										},
+										label: {
+											show: true
+										}
+									}
+								},
+								data: data.data.lastMonthIncome
+							},
+							{
+								name: '本月',
+								type: 'line',
+								smooth: true,
+								itemStyle: {
+									normal: {
+										areaStyle: {
+											type: 'default',
+											zIndex: 0.5
+										},
+										label: {
+											show: true
+										}
+									}
+								},
+								data: data.data.thisMonthIncome
+							}
+						]
+					};
+					myChart.setOption(options);
+				} else if (data.code == 202) {
+					window.location.href = './login.html';
+				} else {
+					console.log('失败')
+				}
+			},
+			error: function (xhr, textStatus) {
+				alert("网络异常")
+			}
+		})
+	})
+</script>

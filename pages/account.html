@@ -1,0 +1,181 @@
+<div class="account">
+    <!-- 顶部 -->
+    <div id="top" class="search">
+        <text style="margin-left:0.4rem" id="recruitList">结算中心</text>
+        <text style="color:#d9d9d9;margin:0 0.15rem">|</text>
+        <text style="color:#11a0e7;margin-right:1rem" id="recruitPer">提现记录</text>
+        <input name="" class="form-control datetime-picker" placeholder="开始时间" id="beginTime" readonly>
+        <input name="" class="form-control datetime-picker" placeholder="结束时间" id="endTime" readonly>
+        <input type="button" name="" value="查询" class="chazhao">
+        <input type="button" name="" value="导出" class="daochu">
+    </div>
+    <!-- 提现记录 -->
+    <div class="recruitPerson">
+        <div class="bottom">
+            <table id="accountTable" data-toggle="table"></table>
+        </div>
+    </div>
+
+</div>
+<div class="modal fade" id="accountModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <img src="../images/7.png" alt="">
+    </div>
+</div>
+<script>
+    $(function () {
+        $.cookie("sessionId");
+        $('.datetime-picker').datetimepicker({
+            format: 'yyyy-mm-dd hh:ii:00',
+            language: 'zh-CN',
+            autoclose: true,
+            todayHighlight: true,
+            todayBtn: true,
+            keyboardNavigation: true
+        });
+        var itemInfo, data, eventStatus, beginTime, currentPage = 1;
+        //点击结算中心
+        $('#recruitList').click(function () {
+            $(".content").load("banknote.html");
+        })
+        function ListData() {
+            req = {
+                eventStatus: eventStatus,
+                currentPage: currentPage,
+                beginTime: beginTime,
+            };
+            $.ajax({
+                type: 'POST',
+                url: admin + "/admin/merchant/eventList",
+                data: req,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (res) {
+                    data = JSON.parse(res);
+                    console.log(data)
+                    if (data.code == 200) {
+                        itemInfo = data;
+                        initOperHisTable();
+                        //分页
+                        $('#box').paging({
+                            initPageNo: itemInfo.data.paginationInfo.currentPage, // 初始页码
+                            totalPages: itemInfo.data.paginationInfo.totalPage, //总页数
+                            // totalPages:10, ///总页数
+                            totalCount: '合计' + itemInfo.data.paginationInfo.totalRecord +
+                                '条数据', // 条目总数
+                            // slideSpeed: 600, // 缓动速度。单位毫秒
+                            jump: true, //是否支持跳转
+                            callback: function (page) { // 回调函数
+                                currentPage = page;
+                            }
+                        })
+                    } else if (data.code == 202) {
+                        window.location.href = './login.html';
+                    } else {
+                        console.log('失败')
+                    }
+                },
+                error: function (xhr, textStatus) {
+                    alert("网络异常")
+                }
+            })
+        }
+        ListData();
+        // 跳转数据页码
+        $('.recruitPerson').on('click', '#jumpText', function () {
+            var $inp = $('#jumpText:text');
+            $inp.bind('keydown', function (e) {
+                var key = e.which;
+                if (key == 13) {
+                    if (currentPage == $inp.val() || $inp.val() > itemInfo.data.paginationInfo.totalPage) {
+                        e.preventDefault();
+                    } else {
+                        e.preventDefault();
+                        currentPage = $inp.val();
+                        ListData();
+                    }
+                }
+            });
+        })
+        $('.recruitPerson').on('click', '.jumpPage', function () {
+            currentPage = currentPage;
+            ListData();
+        })
+        //查找
+        $('.chazhao').click(function () {
+            var key = $("#beginTime").val();
+            beginTime = key;
+            console.log('提现记录')
+            ListData();
+        });
+
+        function initOperHisTable() {
+            $('#accountTable').bootstrapTable('destroy').bootstrapTable({
+                contentType: "application/x-www-form-urlencoded",
+                data: itemInfo.data.list,
+                dataField: "rows", //这是返回的json数组的key.默认好像是"rows".这里只有前后端约定好就行
+                pagination: true, //分页
+                sidePagination: "server", //服务端处理分页
+                paginationLoop: false,
+                showPaginationSwitch: false, //是否显示数据条数选择框
+                pageNumber: 1,
+                pageSize: 10,
+                pageList: [10],
+
+                formatLoadingMessage: function () {
+                    return "请稍等，正在查询中...";
+                },
+
+                formatNoMatches: function () { //没有匹配的结果
+                    return '无符合条件的记录';
+                },
+                columns: [{
+                        field: 'id',
+                        title: '账目明细'
+                    },
+                    {
+                        field: 'name',
+                        title: '账目总额'
+                    },
+                    {
+                        field: 'price',
+                        title: '服务费'
+                    },
+                    {
+                        field: 'basePot',
+                        title: '税费'
+                    },
+                    {
+                        field: 'eventStatus',
+                        title: '实到总额'
+                    },
+                    {
+                        field: 'operate',
+                        title: '查看资料',
+                        align: 'center',
+                        events: {
+                            //选中
+                            'click #look': function (e, value, row, index) {
+                                Data = row;
+                                $('#accountModal').modal('show');
+                                return;
+                            },
+                        },
+                        formatter: function (value, row, index) {
+                            return '<span style="font-size:0.25rem;color:#11a0e7;" id="look">查看账单</span>'
+                        }
+                    },
+                    {
+                        field: 'operate',
+                        title: '状态',
+                        align: 'center',
+                        formatter: function (value, row, index) {
+                            return '<span style="font-size:0.25rem;">已到账</span>'
+                        }
+                    },
+                ]
+            });
+        }
+    })
+</script>

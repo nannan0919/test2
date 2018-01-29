@@ -1,0 +1,380 @@
+<div class="recruit">
+    <!-- 顶部 -->
+    <div id="top" class="search">
+        <text style="margin-left:0.4rem" id="recruitList">招募列表</text>
+        <text style="color:#d9d9d9;margin:0 0.15rem">|</text>
+        <text style="color:#11a0e7;margin-right:0.75rem" id="recruitPer">招募人员</text>
+        <text style="color:#e29942;" id="demand">需求；lv3或300积分 男女不限 人数5人 上班时间9:00-24:00(时间不限) 这是一段福利</text>
+        <input type="button" name="" value="推送消息" id="pull">
+    </div>
+    <!-- 招募人员 -->
+    <div class="recruitPerson">
+        <div class="search Head">
+            <div style="float:left;height:0.7rem">
+                <ul id="selectBox">
+                    <li id="choose">
+                        <label class="radio">
+                            <input type="checkbox" id="" name="choose" value="1">
+                        </label>
+                    </li>
+                    <li style="margin:0 0.1rem">
+                        <select name="" id="testSelect">
+                            <option value="" id="doing">已 录 用</option>
+                            <option value="" id="init" selected>待 处 理</option>
+                            <option value="" id="done">已 拒 绝</option>
+                        </select>
+                    </li>
+                    <li>
+                        <input type="button" name="" value="查询" class="chazhao">
+                    </li>
+                    <li></li>
+                </ul>
+            </div>
+            <div class="operaList">
+                <button class="cancel">拒绝</button>
+                <button id="change">录用</button>
+            </div>
+        </div>
+        <ul class="list"></ul>
+        <div class="fixed-table-pagination"></div>
+    </div>
+</div>
+<!-- 拒绝/录用信息 -->
+<div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="top:0.8rem">
+            <div class="modal-header">
+                <text style="color:#fff">提示</text>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <text style="color:#797979" id="warming"></text>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary con" id="hire">确认</button>
+                <button type="button" class="btn btn-primary con" id="reject">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 推送信息 -->
+<div class="modal fade" id="pullModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="top:0.8rem">
+            <div class="modal-header">
+                <text style="color:#fff">请输入会员卡号</text>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label for="card" class="control-label">会员卡号：</label>
+                <input type="number" class="form-control" id="card" name="card" placeholder="例:13098118">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary con" id="pullSure">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(function () {
+            $.cookie("sessionId");
+            var itemInfo, data, eventStatus, id = '',
+                status = 0,
+                currentPage = 1;
+            recruitPer();
+            // 推送消息
+            $('#pull').click(function () {
+                $('#pullModal').modal('show')
+            })
+            $('#pullSure').click(function () {
+                req = {
+                    cardNo: $('.modal-body input[name=card]').val(),
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: admin + "/admin/merchant/pushRrecruitMessageToOne",
+                    data: req,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function (res) {
+                        data = JSON.parse(res);
+                        console.log(data)
+                        if (data.code == 200) {
+                            itemInfo = data;
+                            $('#pullModal').modal('hide')
+                        } else if (data.code == 202) {
+                            window.location.href = './login.html';
+                        } else {
+                            toastr.warning(data.desc);
+                        }
+                    },
+                    error: function (xhr, textStatus) {
+                        alert("网络异常")
+                    }
+                })
+            })
+            //点击招募列表
+            $('#recruitList').click(function () {
+                $(".content").load("recruitList.html");
+            })
+            // 点击招募员工
+            $('#recruitPer').click(function () {
+                recruitPer();
+            })
+            //招募员工所有信息
+            function recruitPer() {
+                id = $('#recruitId').text();
+                //初始化信息
+                function detail() {
+                    var req = {
+                        currentPage: currentPage,
+                        id: id,
+                        status: status,
+                        recordPerPage: 5,
+                    }
+                    $.ajax({
+                        type: "post",
+                        url: admin + '/admin/merchant/recruitmentDetail',
+                        data: req,
+                        contentType: "application/x-www-form-urlencoded",
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        crossDomain: true,
+                        success: function (res) {
+                            var data = jQuery.parseJSON(res);
+                            itemInfo = data;
+                            var content = '';
+                            for (var i = 0; i < data.data.list.length; i++) {
+                                content +=
+                                    '<li><ul><li class="choose"><label class="radio">' +
+                                    '<input type="checkbox" id="' + data.data.list[i].id +
+                                    '" name="cat" value="' + data.data.list[i].userName +
+                                    '"><i class="choic"></i></label></li>' +
+                                    '<li style="width:1.3rem;margin-right:0.2rem"> <img src="' +
+                                    data.data.list[i].imageUrl +
+                                    '" alt="" class="yulan"></li>' +
+                                    '<li><p><text>姓名：</text><text class="userName">' + data.data.list[
+                                        i]
+                                    .userName +
+                                    '</text></p><p><text>昵称：</text><text>' + data.data.list[i].nickName +
+                                    '</text></p></li>' +
+                                    '<li><p><text>等级：</text><text>' + data.data.list[i].level +
+                                    '</text></p><p><text>联系电话：</text><text>' + data.data.list[i].phone +
+                                    '</text></p></li>' +
+                                    '<li><p><text>申请时间：</text><text>' + data.data.list[i].createTime +
+                                    '</text></p><p><text>宣言：</text><text>' + data.data.list[i].note +
+                                    '</text></p></li>' +
+                                    '<li><text>' + data.data.list[i].applyStatus +
+                                    '</text><text style="display:none" id="applyStatusCode">' +
+                                    data.data.list[i].applyStatusCode +
+                                    '</text></li></ul></li>'
+                                // <text id="exmine"><img src="../images/resume.png" alt="">查看简历</text>
+                            }
+
+                            if (data.code == 200) {
+                                if (data.data.list.length == 0) {
+                                    $('.list').html('');
+                                    $(".fixed-table-pagination").html(
+                                        '<text style="color: #040404;text-align: center;line-height: 1rem;display: inherit;">无符合条件的记录</text>'
+                                    )
+                                } else {
+                                    $('.list').html(content);
+                                    $('.yulan').zoomify();
+                                    $('#box').paging({
+                                        initPageNo: itemInfo.data.paginationInfo.currentPage, // 初始页码
+                                        totalPages: itemInfo.data.paginationInfo.totalPage, //总页数
+                                        totalCount: '合计' + itemInfo.data.paginationInfo.totalRecord +
+                                            '条数据', // 条目总数
+                                        jump: true, //是否支持跳转
+                                        callback: function (Page) { // 回调函数
+                                            currentPage = Page;
+                                        }
+                                    })
+                                }
+
+                            } else if (data.code = 202) {
+                                toastr.warning(data.desc);
+
+                                window.location.href = './login.html';
+                            } else {
+                                toastr.error(data.desc);
+                            }
+                        },
+                        error: function (data) {
+                            toastr.error("网络异常");
+                        }
+                    });
+                }
+                detail()
+
+                // 跳转数据页码
+                $('.recruitPerson').on('click', '#jumpText', function () {
+                    var $inp = $('#jumpText:text');
+                    $inp.bind('keydown', function (e) {
+                        var key = e.which;
+                        if (key == 13) {
+                            if (currentPage == $inp.val() || $inp.val() > itemInfo.data.paginationInfo
+                                .totalPage) {
+                                e.preventDefault();
+                            } else {
+                                e.preventDefault();
+                                currentPage = $inp.val();
+                                detail();
+                            }
+                        }
+                    });
+                })
+                $('.recruitPerson').on('click', '.jumpPage', function () {
+                    currentPage = currentPage;
+                    detail();
+                })
+
+                // 选中
+                function SelectAll() {
+                    var a = document.getElementsByName("choose")[0];
+                    var checkboxs = document.getElementsByName("cat");
+                    if (a.checked == true) {
+                        for (var i = 0; i < 5; i++) {
+                            var e = checkboxs[i];
+                            e.checked = true;
+                        }
+                    } else {
+                        for (var i = 0; i < 5; i++) {
+                            var e = checkboxs[i];
+                            e.checked = false;
+                        }
+                    }
+                }
+                $('.list').on('click', '.choose', function () {
+                    var checkboxs = document.getElementsByName("cat");
+                    var index = $(this).parent().parent('li').index();
+                    if (checkboxs[index].checked) {
+                        checkboxs[index].checked = false;
+                    } else {
+                        checkboxs[index].checked = true;
+                    }
+                })
+                $('#choose').click(function () {
+                    SelectAll()
+                    a = document.getElementsByName("choose")
+                    obj = document.getElementsByName("cat");
+                    check_val = [];
+                    for (k in obj) {
+                        if (obj[k].checked)
+                            check_val.push(obj[k].value);
+                    }
+                })
+
+                function opear() {
+                    var req = {
+                        applyIds: applyIds,
+                        status: status
+                    }
+                    $.ajax({
+                        type: "post",
+                        url: admin + '/admin/merchant/updateRecruitApplys',
+                        data: req,
+                        contentType: "application/x-www-form-urlencoded",
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        crossDomain: true,
+                        success: function (res) {
+                            var data = jQuery.parseJSON(res);
+                            console.log(data)
+                            if (data.code == 200) {
+                                $('#cancelModal').modal('hide');
+                                detail();
+                            } else if (data.code = 202) {
+                                toastr.warning(data.desc);
+                                window.location.href = './login.html';
+                            } else {
+                                toastr.error(data.desc);
+                            }
+                        },
+                        error: function (data) {
+                            toastr.error("网络异常");
+                        }
+                    });
+                }
+                // 驳回信息
+                $('.operaList>.cancel').click(function () {
+                    if ($('#applyStatusCode').text() == 2 || $('#applyStatusCode').text() == 1) {
+                        alert('当前信息不可操作，可操作待处理的信息')
+                    } else {
+                        $('#reject').css('display', 'inline-block');
+                        $('#hire').css('display', 'none');
+                        obj = document.getElementsByName("cat");
+                        check_id = [];
+                        check_val = [];
+                        for (k in obj) {
+                            if (obj[k].checked) {
+                                check_val.push(obj[k].value);
+                                check_id.push(obj[k].id)
+                            }
+                        }
+                        applyIds = check_id.toString();
+                        status = 2;
+                        if (check_val.length == 0) {} else {
+                            $('#cancelModal').modal('show');
+                            $('#warming').html('你确定要驳回' + check_val + '的信息吗？');
+                        }
+                    }
+
+                })
+                // 确定驳回
+                $('#reject').click(function () {
+                    opear();
+                })
+                // 录用信息
+                $('.operaList>#change').click(function () {
+                    if ($('#applyStatusCode').text() == 1 || $('#applyStatusCode').text() == 2) {
+                        alert('当前信息不可操作，可操作待处理的信息')
+                    } else {
+                        $('#hire').css('display', 'inline-block');
+                        $('#reject').css('display', 'none');
+                        obj = document.getElementsByName("cat");
+                        check_id = [];
+                        check_val = [];
+                        for (k in obj) {
+                            if (obj[k].checked) {
+                                check_val.push(obj[k].value);
+                                check_id.push(obj[k].id)
+                            }
+                        }
+                        applyIds = check_id.toString();
+                        status = 1;
+                        if (check_val.length == 0) {
+
+                        } else {
+                            $('#cancelModal').modal('show');
+                            $('#warming').html('你确定要录用' + check_val + '吗？');
+                        }
+                    }
+
+                })
+                $('#hire').click(function () {
+                    opear();
+
+                })
+                // 查找
+                $('.chazhao').click(function () {
+                    if ($("#testSelect option:selected").text() == '待 处 理') {
+                        status = 0
+                    } else if ($("#testSelect option:selected").text() == '已 录 用') {
+                        status = 1
+                    } else {
+                        status = 2
+                    }
+                    currentPage = 1;
+                    detail()
+                })
+            }
+        })
+    </script>

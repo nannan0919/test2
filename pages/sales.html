@@ -1,0 +1,380 @@
+<div class="sales">
+
+    <!--搜索-->
+    <div class="search sales">
+        <ul>
+            <li>
+                <text>筛选&nbsp;</text>
+                <input name="" class="form-control datetime-picker" placeholder="开始时间" id="beginTime" readonly>
+                <input name="" class="form-control datetime-picker" placeholder="结束时间" id="endTime" readonly>
+            </li>
+            <li style="margin:0 0.2rem">
+                <select name="" id="testSelect1">
+                    <!-- <option value="-1">年份</option> -->
+                    <option value="">2017</option>
+                    <option value=""selected>2018</option>
+                    <option value="">2019</option>
+                    <option value="">2020</option>
+                    <option value="">2021</option>
+                    <option value="">2022</option>
+                    <option value="">2023</option>
+                    <option value="">2024</option>
+                    <option value="">2025</option>
+                </select>
+            </li>
+            <li>
+                <select name="" id="testSelect2">
+                    <!-- <option value="">月份</option> -->
+                    <option value="" selected>01</option>
+                    <option value="">02</option>
+                    <option value="">03</option>
+                    <option value="">04</option>
+                    <option value="">05</option>
+                    <option value="">06</option>
+                    <option value="">07</option>
+                    <option value="">08</option>
+                    <option value="">09</option>
+                    <option value="">10</option>
+                    <option value="">11</option>
+                    <option value="">12</option>
+                </select>
+            </li>
+            <li>
+
+                <input type="button" name="" value="查询" class="chazhao">
+                <input type="button" name="" value="导出" class="daochu">
+            </li>
+        </ul>
+    </div>
+    <div class="kind">
+        <span>
+            <img src="../images/up.png" alt="">
+            <i>
+                <text style="color:#64c0b4" id="totalSaleAmount"></text>
+                <text>总销量</text>
+            </i>
+
+        </span>
+        <span>
+            <img src="../images/year.png" alt="">
+            <i>
+                <text style="color:#6496c0" id="yearSaleAmount"></text>
+                <text>年销量</text>
+            </i>
+
+        </span>
+        <span>
+            <img src="../images/month.png" alt="">
+            <i>
+                <text style="color:#11a0e7" id="monthSaleAmount"></text>
+                <text>月销量</text>
+            </i>
+
+        </span>
+        <span>
+            <img src="../images/week.png" alt="">
+            <i>
+                <text style="color:#fc6781">0</text>
+                <text>周销量</text>
+            </i>
+        </span>
+    </div>
+    <div class="trend">
+        <div class="title">
+            <img src="../images/circle1.png" alt="">
+            <text>去年</text>
+            <img src="../images/circle2.png" alt="">
+            <text>今年</text>
+        </div>
+        <div id="trand" style="min-width:400px;height:4.9rem;">
+
+        </div>
+    </div>
+    <h4>数据明细</h4>
+    <div class="data">
+        <div class="left">
+            <table id="detailTable" data-toggle="table"></table>
+        </div>
+        <div class="right">
+            <div>周销量图</div>
+            <div id="weekSales" style="min-width:7rem;height:5.1rem;">
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    $(function () {
+        $.cookie("sessionId");
+        $('#testSelect1').fancyspinbox();
+        $('#testSelect2').fancyspinbox();
+        $('.datetime-picker').datepicker({
+            format: 'yyyy-mm-dd',
+            language: 'zh-CN',
+            autoclose: true,
+            todayHighlight: true,
+            todayBtn: true,
+            keyboardNavigation: true
+        });
+        //折线图
+        function polyline() {
+            var myCharts = echarts.init(document.getElementById('trand'));
+            option = {
+                color: ['#83caef', '#03f999'],
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: [{
+                    type: 'category',
+                    data: ['1', '2', '3', '4', '5', '6', '7', '8', '9',
+                        '10', '11', '12',
+                    ],
+                    axisTick: {
+                        alignWithLabel: true
+                    }
+                }],
+                yAxis: [{
+                    splitLine: {
+                        show: false
+                    }, //没有表格
+                    type: 'value',
+                }],
+                series: [{
+                        name: '今年',
+                        type: 'line',
+                        smooth: true,
+                        itemStyle: {
+                            normal: {
+                                areaStyle: {
+                                    type: 'default',
+                                    zIndex: 0.5
+                                },
+                                label: {
+                                    show: true
+                                }
+                            }
+                        },
+                        data: itemInfo.data.thisYearSale
+                    },
+                    {
+                        name: '去年',
+                        type: 'line',
+                        smooth: true,
+                        itemStyle: {
+                            normal: {
+                                areaStyle: {
+                                    type: 'default',
+                                    zIndex: 0.5
+                                },
+                                label: {
+                                    show: true
+                                }
+                            }
+                        },
+                        data: itemInfo.data.lastYearSale
+                    }
+                ]
+            };
+            myCharts.setOption(option);
+        }
+        //柱状图
+        function columnar() {
+            var myChart = echarts.init(document.getElementById('weekSales'));
+            var category = [];
+            options = {
+                color: ['#83caef', '#03f999'],
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                    }
+                },
+                grid: {
+                    left: '2%',
+                    right: '4%',
+                    bottom: '2%',
+                    containLabel: true
+                },
+                xAxis: [{
+                    data: category,
+                    data: ['商品收入', '门票收入'],
+                    axisTick: {
+                        alignWithLabel: true //***
+                    }
+                }],
+                yAxis: [{
+                    splitLine: {
+                        show: false
+                    }, //没有表格
+                    type: 'value',
+                }],
+
+
+                series: [{
+                    type: 'bar',
+                    barWidth: 20,
+                    smooth: true,
+                    itemStyle: {
+                        normal: {
+                            color: new echarts.graphic.LinearGradient(
+                                0, 0, 0, 1, [{
+                                        offset: 0,
+                                        color: '#14c8d4'
+                                    },
+                                    {
+                                        offset: 1,
+                                        color: '#43eec6'
+                                    }
+                                ]
+                            ),
+                            label: {
+                                show: true,
+                                position: 'top',
+                            }
+                        }
+                    },
+                    data: [itemInfo.data.groupBuyIncomeAmount, itemInfo.data.eventIncomeAmount]
+                }, ]
+            };
+            myChart.setOption(options);
+        }
+        var itemInfo, data, beginTime, endTime, year, month, currentPage = 1;
+        // 数据
+        function salesListData() {
+            req = {
+                currentPage: currentPage,
+                recordPerPage: 7,
+                beginTime: beginTime,
+                endTime: endTime,
+                year: year,
+                month: month,
+            };
+            $.ajax({
+                type: 'POST',
+                url: admin + "/admin/merchant/saleInfoSearch",
+                data: req,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (res) {
+                    data = JSON.parse(res);
+                    console.log(data)
+                    if (data.code == 200) {
+                        itemInfo = data;
+                        $('#monthSaleAmount').text(itemInfo.data.monthSaleAmount)
+                        $('#yearSaleAmount').text(itemInfo.data.yearSaleAmount)
+                        $('#totalSaleAmount').text(itemInfo.data.totalSaleAmount);
+                        initOperHisTable();
+                        columnar();
+                        polyline();
+                        //分页
+                        var pageWrap = document.getElementsByClassName('pageWrap');
+                        $('#box').paging({
+                            initPageNo: itemInfo.data.paginationInfo.currentPage, // 初始页码
+                            totalPages: itemInfo.data.paginationInfo.totalPage, //总页数
+                            totalCount: '合计' + itemInfo.data.paginationInfo.totalRecord +
+                                '条数据', // 条目总数
+                            // slideSpeed: 600, // 缓动速度。单位毫秒
+                            jump: true, //是否支持跳转
+                            callback: function (page) { // 回调函数
+                                currentPage = page;
+                            }
+                        })
+                    } else if (data.code == 202) {
+                        window.location.href = './login.html';
+                    } else {
+                        console.log('失败')
+                    }
+                },
+                error: function (xhr, textStatus) {
+                    alert("网络异常")
+                }
+            })
+        }
+        salesListData()
+        // 跳转数据页码
+        $('.sales').on('click', '#jumpText', function () {
+            var $inp = $('#jumpText:text');
+            $inp.bind('keydown', function (e) {
+                var key = e.which;
+                if (key == 13) {
+                    if (currentPage == $inp.val() || $inp.val() > itemInfo.data.paginationInfo.totalPage) {
+                        e.preventDefault();
+                    } else {
+                        e.preventDefault();
+                        currentPage = $inp.val();
+                        salesListData()
+                    }
+                }
+            });
+        })
+        $('.sales').on('click', '.jumpPage', function () {
+            currentPage = currentPage;
+            salesListData();
+        })
+        // 表格
+        function initOperHisTable() {
+            $('#detailTable').bootstrapTable('destroy').bootstrapTable({
+                // url: admin+"/admin/merchant/orderList",
+                data: itemInfo.data.saleDetailList,
+                method: 'post',
+                contentType: "application/x-www-form-urlencoded",
+                dataField: "rows", //这是返回的json数组的key.默认好像是"rows".这里只有前后端约定好就行
+                pagination: true, //分页
+                // sidePagination: "server", //服务端处理分页
+                paginationLoop: false,
+                showPaginationSwitch: false, //是否显示数据条数选择框
+                pageNumber: 1,
+                pageSize: 7,
+                pageList: [7],
+                showExport: true,
+                formatLoadingMessage: function () {
+                    return "请稍等，正在查询中...";
+                },
+
+                formatNoMatches: function () { //没有匹配的结果
+                    return '无符合条件的记录';
+                },
+                columns: [{
+                        field: 'date',
+                        title: '销售日期'
+                    }, {
+                        field: 'eventSaleAmount',
+                        title: '商品总额'
+                    }, {
+                        field: 'groupBySaleAmount',
+                        title: '门票总额'
+                    },
+                    {
+                        field: 'totalSaleAmount',
+                        title: '总销量'
+                    }
+                ]
+            });
+        }
+        //查找
+        $(".chazhao").click(function () {
+            var key = $('#testSelect1 option:selected').text();
+            var key1 = $('#testSelect2 option:selected').text();
+            key1=key+'-0'+key1;
+            var key2 = $('#beginTime').val();
+            var key3 = $('#endTime').val();
+            year = key,
+                month = key1,
+                currentPage = '';
+            beginTime = key2;
+            endTime = key3;
+            salesListData();
+        });
+    });
+</script>

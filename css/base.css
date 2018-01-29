@@ -1,0 +1,198 @@
+/*公共css样式*/
+
+body {
+    padding: 0;
+    margin: 0;
+    font-size: 0.25rem;
+    width: 100%;
+    height: 100%;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+
+/*1.样式重置*/
+
+html,
+body,
+ul,
+li,
+img,
+a,
+p,
+div,
+form,
+input,
+h3,
+h4 {
+    margin: 0;
+    padding: 0;
+    /*设置盒模型*/
+    box-sizing: border-box;
+    /*去除移动端特有的点击高亮效果*/
+    -webkit-tap-highlight-color: transparent;
+}
+
+a:hover {
+    text-decoration: none
+}
+
+i {
+    font-style: normal;
+}
+
+s {
+    text-decoration: none;
+}
+
+.fr {
+    float: right;
+}
+
+.fl {
+    float: left;
+}
+
+input,
+button,
+select,
+option {
+    outline: none;
+    border: 0px;
+    border: 0.01rem dashed #c4d1d6;
+}
+
+input {
+    width: 1.3rem;
+    height: 0.5rem;
+    border: 0.01rem dashed #c4d1d6;
+    border-radius: 0.1rem;
+    padding-left: 0.05rem;
+    line-height: 0.5rem;
+    text-align: center;
+}
+
+input::-webkit-input-placeholder {
+    color: #c4d1d6;
+    font-size: 0.22rem;
+}
+/* 去除ios手机端input输入框上方有阴影 */
+input{
+    -webkit-appearance: none;
+}
+textarea{
+    -webkit-appearance: none;
+}
+button {
+    width: 1.5rem;
+    height: 0.45rem;
+    border-radius: 0.1rem;
+    line-height: 0.45rem;
+    /*margin-left: 0.5rem;*/
+    background-color: #11a0e7;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+
+/*去掉li标签的样式*/
+
+li {
+    list-style: none;
+}
+
+ul {
+    margin: 0px;
+    padding: 0px;
+}
+
+
+/*// 头部*/
+
+.header {
+    height: 0.6rem;
+    line-height: 0.6rem;
+    background-color: #35353D;
+    box-sizing: border-box;
+    text-align: center;
+    color: #fff;
+    padding: 0px 0.2rem 0px 0.2rem;
+}
+
+.header .left {
+    float: left;
+}
+
+.header .right {
+    float: right;
+}
+
+.header .right text {
+    margin-right: 0.21rem;
+}
+
+.header .right img {
+    width: 0.16rem;
+    height: 0.17rem;
+    margin-right: 0.05rem;
+}
+
+.change,
+.delete {
+    padding: 0.1rem 0.2rem;
+    width: 1.2rem;
+    height: 0.3rem;
+    border-radius: 0.07rem;
+}
+
+.change {
+    margin-right: 0.2rem;
+}
+
+.span {
+    display: inline-block;
+    width: 0.4rem;
+    height: 0.4rem;
+    /* line-height: 0.26rem; */
+    border: 0.01rem solid #e3e3e3;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    /* text-align: center; */
+    /* position: relative; */
+    /* margin-right: 0; */
+}
+
+.text {
+    width: 0.15rem;
+    height: 0.15rem;
+    border-radius: 50%;
+    background-color: #09d760;
+    display: none;
+    position: absolute;
+    top: 25%;
+    left: 25%;
+}
+
+select {
+    border-radius: 0.1rem;
+    height: 0.5rem;
+    font-size: 0.25rem;
+}
+.modal-header{
+    font-size: 0.3rem;
+    letter-spacing: 0.02rem;
+}
